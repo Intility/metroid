@@ -23,21 +23,17 @@ class Command(BaseCommand):
         """
         Creates background tasks to subscribe to events
         """
-        tasks: list[Task] = []
-        for subscription in settings.subscriptions:
-            tasks.append(
-                asyncio.create_task(
-                    subscribe_to_topic(
-                        connection_string=subscription['connection_string'],
-                        topic_name=subscription['topic_name'],
-                        subscription_name=subscription['subscription_name'],
-                        handlers=subscription['handlers'],
-                    )
+        tasks: list[Task] = [
+            asyncio.create_task(
+                subscribe_to_topic(
+                    connection_string=subscription['connection_string'],
+                    topic_name=subscription['topic_name'],
+                    subscription_name=subscription['subscription_name'],
+                    handlers=subscription['handlers'],
                 )
             )
-        # tasks: list[Task] = [
-        #     asyncio.create_task(subscribe_to_topic(**subscription) for subscription in settings.subscriptions)
-        # ]
+            for subscription in settings.subscriptions
+        ]
         done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)  # Also covers FIRST_EXCEPTION
 
         # Log why the task ended
