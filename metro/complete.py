@@ -7,9 +7,9 @@ from metro.config import settings
 logger = logging.getLogger('metro')
 
 
-async def defer_message(*, sequence_number: int, topic_name: str, subscription_name: str) -> None:
+async def complete_deferred_message(*, sequence_number: int, topic_name: str, subscription_name: str) -> None:
     """
-    Defers a message based on sequence number, topic name and subscription name.
+    Completes a message based on sequence number, topic name and subscription name.
 
     :param sequence_number: Sequence number of the message
     :param topic_name: Topic name
