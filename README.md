@@ -77,5 +77,10 @@ await complete_deferred_message(
 
 
 ### TODO
+* Docs
+* Tests
+* Make a working demoproject
+* `docker-compose` with the stack
 * Implement APIs to GET all deferred messages
 * Implement a way to retry a message based on a sequence ID
+* Success
