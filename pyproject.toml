@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "metro"
+version = "0.1.0"
+description = "Metro for Django"
+authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+azure-servicebus = "^7.0.1"
+Django = "^2.2 || ^3.1.5"
+celery = "^5.0.0"
+asgiref = "^3.3.1"
+djangorestframework = "^3.9.0"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.9.3"
+python-decouple = "^3.4"
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+    (\.eggs|\.git|\.hg|\.mypy_cache|\.tox|\.venv|\venv|\.github|\docs|\tests|\__pycache__)
+)
+'''
+
+[tool.isort]
+profile = "black"
+src_paths = ["django_guid"]
+combine_as_imports = true
+line_length = 120
+sections = [
+    'FUTURE',
+    'STDLIB',
+    'DJANGO',
+    'THIRDPARTY',
+    'FIRSTPARTY',
+    'LOCALFOLDER'
+]
+known_django = ['django']
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

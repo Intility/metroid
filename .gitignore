@@ -1,0 +1,16 @@
+*.pyc
+.idea/*
+env/
+.env
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+notes
+.pytest_cache
+.coverage
+htmlcov/
+
+# celery
+celerybeat-*
