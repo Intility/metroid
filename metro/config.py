@@ -16,18 +16,21 @@ class Settings:
     how settings are implemented.
     ***REMOVED***
 
-    # OLD
     METRO = {
         subscriptions': {
             [
                 {
-                    'topic_name': 'metro-demo',
-                    'subscription_name': 'sub-metrodemo-helloworld',
+                    'topic_name': '***REMOVED***',
+                    'subscription_name': 'sub-***REMOVED***--helloworld',
                     'connection_string': 'Endpoint=sb://...',
                     'handlers': [
                         {
                             'subject': 'MetroDemo/Type/GeekJokes',
-                            'handler_function': function_to_call
+                            'handler_function': function_to_call,
+                        },
+                        {
+                            'subject': 'MetroDemo/Type/DadJokes',
+                            'handler_function': another_func_to_call
                         }
                     ]
                 },
@@ -40,7 +43,7 @@ class Settings:
             # self.settings: dict[str, list[dict[str, Union[str, list[dict[str, Callable]]]]]] = django_settings.METRO
             self.settings: Subscriptions = django_settings.METRO
         else:
-            raise ImproperlyConfigured('No METRO settings found in Django config')
+            raise ImproperlyConfigured('`METRO` settings must be defined in settings.py')
 
     @property
     def subscriptions(self) -> list[Subscription]:

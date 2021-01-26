@@ -11,6 +11,7 @@ notes
 .pytest_cache
 .coverage
 htmlcov/
+db.sqlite3
 
 # celery
 celerybeat-*

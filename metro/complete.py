@@ -2,8 +2,6 @@ import logging
 
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
-from metro.config import settings
-
 logger = logging.getLogger('metro')
 
 
@@ -15,6 +13,8 @@ async def complete_deferred_message(*, sequence_number: int, topic_name: str, su
     :param topic_name: Topic name
     :param subscription_name: Subscription name
     """
+    from metro.config import settings
+
     connection_string = settings.get_subscription_string(topic_name=topic_name, subscription_name=subscription_name)
     metro_client: ServiceBusClient
     async with ServiceBusClient.from_connection_string(conn_str=connection_string) as metro_client:

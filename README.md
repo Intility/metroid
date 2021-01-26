@@ -74,7 +74,19 @@ await complete_deferred_message(
 )
 ```
 
-
+### Running the project
+Ensure you have redis running:
+```bash
+docker-compose up
+```
+Start a worker:
+```python
+celery -A demoproj worker -l info
+```
+Run the subscriber:
+```python
+python manage.py metro
+```
 
 ### TODO
 * Docs

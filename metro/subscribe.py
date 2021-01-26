@@ -46,14 +46,13 @@ async def subscribe_to_topic(
                 # Check how to handle this message
                 for handler in handlers:
                     if handler.get('subject') == loaded_message.get('subject'):
-                        await sync_to_async(
-                            handler.get('handler_function').apply_async,  # type: ignore
-                            thread_sensitive=False,
-                        )(
-                            message=loaded_message,
-                            topic_name=topic_name,
-                            subscription_name=subscription_name,
-                            sequence_number=sequence_number,
-                        )
                         await receiver.defer_message(message=message)
+                        await sync_to_async(handler.get('handler_function').apply_async)(  # type: ignore
+                            kwargs={
+                                'message': loaded_message,
+                                'topic_name': topic_name,
+                                'subscription_name': subscription_name,
+                                'sequence_number': sequence_number,
+                            }
+                        )
                 # TODO What do we do with messages we don't care about?

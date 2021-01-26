@@ -1,14 +1,15 @@
 import logging
 
 from asgiref.sync import sync_to_async
-from celery import shared_task
+from demoproj.celery import app
+
 
 from metro.complete import complete_deferred_message
 
 logger = logging.getLogger(__name__)
 
 
-@shared_task
+@app.task
 def my_func(*, message: dict, topic_name: str, subscription_name: str, sequence_number: int) -> None:
     """
     Demo task

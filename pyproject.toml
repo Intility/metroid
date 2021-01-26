@@ -15,6 +15,7 @@ djangorestframework = "^3.9.0"
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.9.3"
 python-decouple = "^3.4"
+redis = "^3.5.3"
 
 [tool.black]
 line-length = 120
