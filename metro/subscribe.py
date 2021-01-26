@@ -28,6 +28,7 @@ async def subscribe_to_topic(
         async with metro_client.get_subscription_receiver(
             topic_name=topic_name, subscription_name=subscription_name
         ) as receiver:
+            logger.info('Started subscription for topic %s and subscription %s', topic_name, subscription_name)
             # We now have a receiver, we can use this to talk with Metro
             message: ServiceBusReceivedMessage
             async for message in receiver:
@@ -44,9 +45,19 @@ async def subscribe_to_topic(
                         error,
                     )
                 # Check how to handle this message
+                logger.info(
+                    '%s: Received message, sequence number %s. Content: %s',
+                    subscription_name,
+                    sequence_number,
+                    loaded_message,
+                )
+                handled_message = False
                 for handler in handlers:
                     if handler.get('subject') == loaded_message.get('subject'):
+                        logger.info('Subject matching: %s', handler.get('subject'))
                         await receiver.defer_message(message=message)
+                        handled_message = True
+                        logger.info('Message with sequence number %s deferred', sequence_number)
                         await sync_to_async(handler.get('handler_function').apply_async)(  # type: ignore
                             kwargs={
                                 'message': loaded_message,
@@ -55,4 +66,7 @@ async def subscribe_to_topic(
                                 'sequence_number': sequence_number,
                             }
                         )
-                # TODO What do we do with messages we don't care about?
+                        logger.info('Celery task started')
+                if not handled_message:
+                    logger.info('Completing message')
+                    await receiver.complete_message(message=message)

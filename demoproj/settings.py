@@ -132,6 +132,12 @@ METRO = {
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
             'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
         },
+        {
+            'topic_name': 'metro-demo',
+            'subscription_name': 'sub-metrodemo-metrooj',
+            'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
+            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
+        },
     ]
 }
 
