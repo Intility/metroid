@@ -141,6 +141,28 @@ METRO = {
     ]
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        # Basic log format without django-guid filters
+        'basic_format': {'format': '%(levelname)s %(asctime)s %(name)s - %(message)s'},
+    },
+    'handlers': {
+        'default': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'basic_format',
+        },
+    },
+    'loggers': {
+        'demoproj': {'handlers': ['default'], 'level': 'DEBUG'},
+        'metro': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 CELERY_BROKER_URL = 'redis://:@127.0.0.1:6378'
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL

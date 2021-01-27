@@ -3,7 +3,7 @@ import logging
 from typing import Callable, Union
 
 from asgiref.sync import sync_to_async
-from azure.servicebus import ServiceBusReceivedMessage
+from azure.servicebus import ServiceBusReceivedMessage, TransportType
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
 from metro.typing import Handler
@@ -22,11 +22,14 @@ async def subscribe_to_topic(
     """
     # Create a connection to Metro
     metro_client: ServiceBusClient
-    async with ServiceBusClient.from_connection_string(conn_str=connection_string) as metro_client:
+    async with ServiceBusClient.from_connection_string(
+        conn_str=connection_string, transport_type=TransportType.AmqpOverWebsocket
+    ) as metro_client:
         # Subscribe to a topic with through our subscription name
         receiver: ServiceBusReceiver
         async with metro_client.get_subscription_receiver(
-            topic_name=topic_name, subscription_name=subscription_name
+            topic_name=topic_name,
+            subscription_name=subscription_name,
         ) as receiver:
             logger.info('Started subscription for topic %s and subscription %s', topic_name, subscription_name)
             # We now have a receiver, we can use this to talk with Metro
@@ -40,7 +43,7 @@ async def subscribe_to_topic(
                     # We defer messages with a faulty body, we do not crash.
                     logger.exception(
                         'Unable to decode message %s. Sequence number %s. Error: %s',
-                        loaded_message,
+                        message,
                         sequence_number,
                         error,
                     )

@@ -17,7 +17,7 @@ class Settings:
     ***REMOVED***
 
     METRO = {
-        subscriptions': {
+        'subscriptions': {
             [
                 {
                     'topic_name': '***REMOVED***',
