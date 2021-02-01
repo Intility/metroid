@@ -19,20 +19,28 @@ def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: 
     logger.info(
         'Message %s, topic %s, subscription_name %s, subject: %s', message, topic_name, subscription_name, subject
     )
-    if subject == 'jonas/tests':
-        r = requests.post(
-            'https://api.intility.no/metro/snt-demo',
+    if subject == 'Test/Django/Module':
+        response = requests.post(
+            url=config('PUBLISH_METRO_URL'),
             headers={'content-type': 'application/json', 'x-metro-key': config('PUBLISH_METRO_KEY')},
             data=json.dumps(
                 {
                     'eventType': 'Intility.Jonas.Testing',
                     'eventTime': timezone.now().isoformat(),
                     'dataVersion': '1.0',
-                    'data': {'content': 'Yo mister!'},
-                    'subject': 'jonas/tests',
+                    'data': {'content': 'Yo, Metro is awesome'},
+                    'subject': 'Test/Django/Module',
                 }
             ),
         )
-        r.raise_for_status()
-        logger.info('POSTED! %s', r.status_code)
+        response.raise_for_status()
+        logger.info('POSTED! %s', response.status_code)
     return
+
+
+@app.task(base=MetroTask)
+def my_broken_task(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
+    """
+    Broken demo task
+    """
+    raise ValueError('Oops, an exception happened! You can retry this task in the admin Dashboard :-)')

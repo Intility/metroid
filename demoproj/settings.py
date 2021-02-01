@@ -136,27 +136,18 @@ DJANGO_GUID = {
 }
 
 
-from demoproj.demoapp.services import my_func  # noqa: E402
+from demoproj.demoapp.services import my_func, my_broken_task  # noqa: E402
 
 METRO = {
     'subscriptions': [
         {
-            'topic_name': 'metro-demo',
-            'subscription_name': 'sub-metrodemo-helloworld',
+            'topic_name': 'test',
+            'subscription_name': 'sub-test-djangomoduletest',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
-            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
-        },
-        {
-            'topic_name': 'metro-demo',
-            'subscription_name': 'sub-metrodemo-menvirkda',
-            'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
-            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
-        },
-        {
-            'topic_name': 'metro-demo',
-            'subscription_name': 'sub-metrodemo-jonaserkulstresstest',
-            'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
-            'handlers': [{'subject': 'jonas/tests', 'handler_function': my_func}],
+            'handlers': [
+                {'subject': 'Test/Django/Module', 'handler_function': my_func},
+                {'subject': 'Exception/Django/Module', 'handler_function': my_broken_task},
+            ],
         },
     ]
 }

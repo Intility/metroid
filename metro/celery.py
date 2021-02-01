@@ -40,7 +40,7 @@ class MetroTask(Task):
                 message=message,
                 exception_type=str(exc),
                 traceback=str(einfo),
-                correlation_id=correlation_id if correlation_id else '',
+                correlation_id=correlation_id or '',
             )
             logger.info('Saved failed message to database.')
         except Exception as error:
