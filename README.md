@@ -1,7 +1,7 @@
-[![Py](https://img.shields.io/badge/Python-v3.9+-blue.svg)](https://python.org)
-[![Django](https://img.shields.io/badge/Django-3.1.1+%20-blue.svg)](https://djangoproject.com)
-[![Celery](https://img.shields.io/badge/Celery-5.0.0+%20-blue.svg)](https://docs.celeryproject.org/en/stable/)
-[![Django-GUID](https://img.shields.io/badge/Django%20GUID-3.2.0+-blue.svg)](https://github.com/snok/django-guid/)
+[![Py](https://img.shields.io/badge/python-v3.9+-blue.svg)](https://python.org)
+[![Django](https://img.shields.io/badge/django-3.1.1+%20-blue.svg)](https://djangoproject.com)
+[![Celery](https://img.shields.io/badge/celery-5.0.0+%20-blue.svg)](https://docs.celeryproject.org/en/stable/)
+[![Django-GUID](https://img.shields.io/badge/django--guid-3.2.0+-blue.svg)](https://github.com/snok/django-guid/)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
@@ -112,7 +112,11 @@ celery -A demoproj worker -l info
 python manage.py metro
 ```
 6. Send messages to Metro. Example code can be found in [`demoproj/demoapp/services.py`](demoproj/demoapp/services.py)
-
+7. Run the webserver:
+```python
+python manage.py runserver 8000
+```
+8. See failed messages under `http://localhost:8080/admin`
 
 To contribute, please see [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
