@@ -35,7 +35,7 @@ It works by:
 1. Going through all your configured subscriptions and start a new async connection for each one of them
 2. Metro sends messages on the subscriptions
 3. This app filters out messages matching subjects you have defined, and queues a celery task to execute
-   the function as specified for that subject
+   the function as specified for that subject  
    3.1. If no task is found for that subject, the message is marked as complete
 4. The message is marked as complete after the Celery task has successfully been queued
 5. If the task is failed, an entry is automatically created in your database

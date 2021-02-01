@@ -1,3 +1,4 @@
+exclude: README.md
 repos:
   - repo: https://github.com/ambv/black
     rev: '20.8b1'
