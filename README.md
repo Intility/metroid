@@ -36,8 +36,10 @@ It works by:
 2. Metro sends messages on the subscriptions
 3. This app filters out messages matching subjects you have defined, and queues a celery task to execute
    the function as specified for that subject
-4. If the task is failed, an entry is automatically created in your database
-5. All failed tasks can be retried manually through the admin dashboard
+   3.1. If no task is found for that subject, the message is marked as complete
+4. The message is marked as complete after the Celery task has successfully been queued
+5. If the task is failed, an entry is automatically created in your database
+6. All failed tasks can be retried manually through the admin dashboard
 
 
 ### Configure and install this package
