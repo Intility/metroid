@@ -253,17 +253,6 @@ python-versions = ">=3.7,<4.0"
 django = ">=3.1.1,<4.0.0"
 
 [[package]]
-name = "djangorestframework"
-version = "3.12.2"
-description = "Web APIs for Django, made easy."
-category = "main"
-optional = false
-python-versions = ">=3.5"
-
-[package.dependencies]
-django = ">=2.2"
-
-[[package]]
 name = "filelock"
 version = "3.0.12"
 description = "A platform independent file lock."
@@ -587,7 +576,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "75b38997e93c84081955d56460f9aeec810fc57a358678773507aedfe0d75b7b"
+content-hash = "83722c0fd0ed46d47fe0fd01096fd2db9142106af6a6d2a9ea30214adb1bd332"
 
 [metadata.files]
 amqp = [
@@ -663,9 +652,6 @@ django = [
 django-guid = [
     {file = "django-guid-3.2.0.tar.gz", hash = "sha256:f5d28f735738b8be12e56d633917d4fc7a5d5967ba059e975bb703cea241cb36"},
     {file = "django_guid-3.2.0-py3-none-any.whl", hash = "sha256:67c5f696bd2126194185db2c7fd1f968a82b3de73cce4ac1acde61ef77992cf9"},
-]
-djangorestframework = [
-    {file = "djangorestframework-3.12.2-py3-none-any.whl", hash = "sha256:0209bafcb7b5010fdfec784034f059d512256424de2a0f084cb82b096d6dd6a7"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
