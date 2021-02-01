@@ -11,11 +11,13 @@ Django = "^2.2 || ^3.1.5"
 celery = "^5.0.0"
 asgiref = "^3.3.1"
 djangorestframework = "^3.9.0"
+django-guid = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.9.3"
 python-decouple = "^3.4"
 redis = "^3.5.3"
+black = "^20.8b1"
 
 [tool.black]
 line-length = 120

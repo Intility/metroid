@@ -1,32 +1,50 @@
+[![Py](https://img.shields.io/badge/Python-v3.9+-blue.svg)](https://python.org)
+[![Django](https://img.shields.io/badge/Django-3.1.1+%20-blue.svg)](https://djangoproject.com)
+[![Celery](https://img.shields.io/badge/Celery-5.0.0+%20-blue.svg)](https://docs.celeryproject.org/en/stable/)
+[![Django-GUID](https://img.shields.io/badge/Django%20GUID-3.2.0+-blue.svg)](https://github.com/snok/django-guid/)
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+
 # Metro for Django
 
-This app is intended to streamline usage of Metro for all Django users.
+This app is intended to streamline integration with Metro for all Django users by:
 
-## General
-This app is intended to run as a standalone service together with Celery.
+* Asynchronous handling of subscriptions and messages with one command
+* Sends all tasks to Celery workers, based on your `settings.py`
+* Retry failed tasks through your admin dashboard when using the `MetroTask` base
 
-If this is not your use case, please look at the
-[Metro Python Samples](***REMOVED***)
-for smaller implementations.
+## Overview
+* `Python` >= 3.9 - We're using the newest versions of type annotations
+* `Celery` >= 5.0.0 - Might work on previous versions, but not supported
+* `Django-GUID` >= 3.2.0 - Storing correlation IDs in the database, making debugging easy
+
+If you're not running Celery or have another use case you can find pure Python examples in both sync and async versions
+in the [Metro Python Samples](***REMOVED***)
+repository.
 
 
-### Overview
+### Implementation
 
-The `python manage.py metro` app is fully asynchronous, and has no blocking code.
+The `python manage.py metro` app is fully asynchronous, and has no blocking code. It utilizes `Celery` to execute tasks.
 
 It works by:
-1. Going through all your configured subscriptions and start a new async connection with each one of them
+1. Going through all your configured subscriptions and start a new async connection for each one of them
 2. Metro sends messages on the subscriptions
 3. This app filters out messages matching subjects you have defined, and queues a celery task to execute
    the function as specified for that subject
-4. The app marks the task as deferred
-5. Your function must mark the message as complete when it is completed.
+4. If the task is failed, an entry is automatically created in your database
+5. All failed tasks can be retried manually through the admin dashboard
 
-![overview](./readme_image.svg)
 
-### API
+### Configure and install this package
 
-#### Settings
+
+> **_Note_**
+> For a complete example, have a look in `demoproj/settings.py`.
+
+1. Create a `METRO` key in `settings.py` with all your subscriptions and handlers.
 Example settings:
 ```python
 from demoproj.demoapp.services import my_func
@@ -42,37 +60,35 @@ METRO = {
 }
 ```
 
-#### Callables
+2. Configure `Django-GUID`  by adding the app to your installed apps, to your middlewares and configuring logging
+as described [here](https://github.com/snok/django-guid#configuration).
+Make sure you enable the [`CeleryIntegration`](https://django-guid.readthedocs.io/en/latest/integrations.html#celery):
+```python
+from django_guid.integrations import CeleryIntegration
+
+DJANGO_GUID = {
+    'INTEGRATIONS': [
+        CeleryIntegration(
+            use_django_logging=True,
+            log_parent=True,
+        )
+    ],
+}
+```
+
+
+#### Creating your own handler functions
 
 Your functions will be called with keyword arguments for
-`message`, `topic_name`, `subscription_name` and `sequence_number`. You function should in other words
+
+
+`message`, `topic_name`, `subscription_name` and `subject`. You function should in other words
 look something like this:
 
 ```python
-def my_func(*, message: dict, topic_name: str, subscription_name: str, sequence_number: int) -> None:
+def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
 ```
 
-#### Marking a message as completed
-All your callables that handle messages should mark the message as completed, so that it can be removed from the
-`deferred` queue in Metro.
-You can do this by calling the `metro.complete.complete_deferred_message` function.
-
-From a **sync** context, do this:
-
-```python
-from asgiref.sync import sync_to_async
-sync_to_async(complete_deferred_message)(
-    sequence_number=sequence_number, topic_name=topic_name, subscription_name=subscription_name
-)
-```
-
-From an **async** context, do this:
-
-```python
-await complete_deferred_message(
-    sequence_number=sequence_number, topic_name=topic_name, subscription_name=subscription_name
-)
-```
 
 ### Running the project
 Ensure you have redis running:
@@ -89,10 +105,5 @@ python manage.py metro
 ```
 
 ### TODO
-* Docs
 * Tests
-* Make a working demoproject
-* `docker-compose` with the stack
-* Implement APIs to GET all deferred messages
-* Implement a way to retry a message based on a sequence ID
-* Success
+* Support regex patterns

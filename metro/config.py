@@ -1,4 +1,4 @@
-from typing import Callable, Union
+from typing import Callable, Optional, Union
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
@@ -63,6 +63,21 @@ class Settings:
             ):
                 # TODO: Fix mypy
                 return subscription['connection_string']  # type: ignore
+        return None
+
+    def get_handler_function(self, *, topic_name: str, subscription_name: str, subject: str) -> Optional[Callable]:
+        """
+        Intended to be used by retry-log.
+        It finds the handler function based on information we have stored in the database.
+        """
+        for subscription in self.subscriptions:
+            if (
+                subscription.get('topic_name') == topic_name
+                and subscription.get('subscription_name') == subscription_name
+            ):
+                for handler in subscription['handlers']:
+                    if handler.get('subject') == subject:
+                        return handler.get('handler_function')
         return None
 
     def validate(self) -> None:

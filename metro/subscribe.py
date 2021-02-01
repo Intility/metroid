@@ -56,17 +56,17 @@ async def subscribe_to_topic(
                 )
                 handled_message = False
                 for handler in handlers:
-                    if handler.get('subject') == loaded_message.get('subject'):
+                    if subject := handler.get('subject') == loaded_message.get('subject'):
                         logger.info('Subject matching: %s', handler.get('subject'))
-                        await receiver.defer_message(message=message)
+                        await receiver.complete_message(message=message)
                         handled_message = True
-                        logger.info('Message with sequence number %s deferred', sequence_number)
+                        logger.info('Message with sequence number %s completed', sequence_number)
                         await sync_to_async(handler.get('handler_function').apply_async)(  # type: ignore
                             kwargs={
                                 'message': loaded_message,
                                 'topic_name': topic_name,
                                 'subscription_name': subscription_name,
-                                'sequence_number': sequence_number,
+                                'subject': subject,
                             }
                         )
                         logger.info('Celery task started')

@@ -14,8 +14,6 @@ from pathlib import Path
 
 from decouple import config
 
-from demoproj.demoapp.services import my_func  # noqa: E402
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'metro',
+    'django_guid',
 ]
 
 MIDDLEWARE = [
+    'django_guid.middleware.guid_middleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -124,19 +124,39 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+from django_guid.integrations import CeleryIntegration  # noqa
+
+DJANGO_GUID = {
+    'INTEGRATIONS': [
+        CeleryIntegration(
+            use_django_logging=True,
+            log_parent=True,
+        )
+    ],
+}
+
+
+from demoproj.demoapp.services import my_func  # noqa: E402
+
 METRO = {
     'subscriptions': [
         {
             'topic_name': 'metro-demo',
-            'subscription_name': 'sub-metrodemo-metrodemoerfett',
+            'subscription_name': 'sub-metrodemo-helloworld',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
             'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
         },
         {
             'topic_name': 'metro-demo',
-            'subscription_name': 'sub-metrodemo-metrooj',
+            'subscription_name': 'sub-metrodemo-menvirkda',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
             'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
+        },
+        {
+            'topic_name': 'metro-demo',
+            'subscription_name': 'sub-metrodemo-jonaserkulstresstest',
+            'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
+            'handlers': [{'subject': 'jonas/tests', 'handler_function': my_func}],
         },
     ]
 }
@@ -146,12 +166,14 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         # Basic log format without django-guid filters
-        'basic_format': {'format': '%(levelname)s %(asctime)s %(name)s - %(message)s'},
+        'basic_format': {'format': '%(levelname)s %(asctime)s [%(correlation_id)s] %(name)s - %(message)s'},
     },
+    'filters': {'correlation_id': {'()': 'django_guid.log_filters.CorrelationId'}},
     'handlers': {
         'default': {
             'class': 'logging.StreamHandler',
             'formatter': 'basic_format',
+            'filters': ['correlation_id'],
         },
     },
     'loggers': {
