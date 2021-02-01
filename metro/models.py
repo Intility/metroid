@@ -8,7 +8,7 @@ class FailedMessage(Model):
     subject = CharField(max_length=255)
     message = JSONField()
 
-    exception_type = TextField()
+    exception_str = TextField()
     traceback = TextField()
 
     # If there is a correlation ID (Requires Django GUID + Celery Integration), save it. Makes fetching logs easy

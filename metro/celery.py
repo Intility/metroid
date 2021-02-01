@@ -38,7 +38,7 @@ class MetroTask(Task):
                 subscription_name=subscription_name,
                 subject=subject,
                 message=message,
-                exception_type=str(exc),
+                exception_str=str(exc),
                 traceback=str(einfo),
                 correlation_id=correlation_id or '',
             )

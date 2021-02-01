@@ -17,7 +17,7 @@ class FailedMessageAdmin(admin.ModelAdmin):
         'subject',
         'subscription_name',
         'message',
-        'exception_type',
+        'exception_str',
         'traceback',
     )
     list_display = ['id', 'correlation_id', 'topic_name', 'subject', 'created']

@@ -56,7 +56,8 @@ async def subscribe_to_topic(
                 )
                 handled_message = False
                 for handler in handlers:
-                    if subject := handler.get('subject') == loaded_message.get('subject'):
+                    subject = handler.get('subject')
+                    if subject == loaded_message.get('subject'):
                         logger.info('Subject matching: %s', handler.get('subject'))
                         await receiver.complete_message(message=message)
                         handled_message = True

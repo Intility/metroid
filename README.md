@@ -91,18 +91,30 @@ def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: 
 
 
 ### Running the project
-Ensure you have redis running:
+1. Ensure you have redis running:
 ```bash
 docker-compose up
 ```
-Start a worker:
+2. Run migrations
+```bash
+python manage.py migrate
+```
+3. Create an admin account
+```bash
+python manage.py createsuperuser
+```
+4. Start a worker:
 ```python
 celery -A demoproj worker -l info
 ```
-Run the subscriber:
+5. Run the subscriber:
 ```python
 python manage.py metro
 ```
+6. Send messages to Metro. Example code can be found in [`demoproj/demoapp/services.py`](demoproj/demoapp/services.py)
+
+
+To contribute, please see [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ### TODO
 * Tests
