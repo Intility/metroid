@@ -5,11 +5,10 @@ description = "Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 azure-servicebus = "^7.0.1"
-Django = "^2.2 || ^3.1.5"
+Django = "^3.1.1"
 celery = "^5.0.0"
-asgiref = "^3.3.1"
 django-guid = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
