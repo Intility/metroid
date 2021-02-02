@@ -1,14 +1,20 @@
-import asyncio
+import uuid
 
 from django.test import override_settings
 
 import pytest
 from demoproj.demoapp.services import my_broken_task, my_func
 from metro.config import Settings
+from tests.mock_service_bus import ServiceBusMock
 
 
 @pytest.fixture(autouse=True)
-def mock_subscriptions(mocker, monkeypatch):
+def mock_service_bus_client(mocker):
+    mocker.patch('metro.subscribe.ServiceBusClient', ServiceBusMock)
+
+
+@pytest.fixture(autouse=True)
+def mock_subscriptions(monkeypatch):
     with override_settings(
         METRO={
             'subscriptions': [

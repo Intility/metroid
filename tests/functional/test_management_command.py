@@ -1,11 +1,8 @@
 import asyncio
-import logging
 
 from django.core.management import call_command
 
 import pytest
-
-logger = logging.getLogger(__name__)
 
 
 @pytest.mark.asyncio
