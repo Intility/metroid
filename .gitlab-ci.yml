@@ -12,8 +12,7 @@ test:
       git
     - pip install poetry
     - poetry install
-    - poetry run coverage run manage.py test
-    - poetry run coverage xml
+    - poetry run pytest --cov=metro tests/* --cov-report=xml
     - poetry run coverage report
   only:
     - merge_requests
