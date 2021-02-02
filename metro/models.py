@@ -18,4 +18,4 @@ class FailedMessage(Model):
         """
         String representation
         """
-        return f'{self.topic_name}-{self.subject}. Correlation ID: {self.correlation_id}'
+        return f'{self.topic_name}-{self.subject}. Correlation ID: {self.correlation_id}'  # pragma: no cover

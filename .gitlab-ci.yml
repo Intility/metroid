@@ -1,0 +1,36 @@
+stages:
+  - test
+  - pypi
+
+test:
+  stage: test
+  image: python:3.9
+  script:
+    - apt-get update
+      && DEBIAN_FRONTEND=noninteractive
+      apt-get install --no-install-recommends -y
+      git
+    - pip install poetry
+    - poetry install
+    - poetry run coverage run manage.py test
+    - poetry run coverage xml
+    - poetry run coverage report
+  only:
+    - merge_requests
+    - master
+  tags:
+    - docker
+    - linux
+
+
+push-to-pypi:
+  stage: pypi
+  image: python:3.9-slim-stretch
+  script:
+    - apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y git
+    - pip install poetry
+    - poetry install
+    - ***REMOVED***
+    - ***REMOVED***
+  only:
+    - master

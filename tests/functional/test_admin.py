@@ -49,8 +49,8 @@ def test_admin_action_no_handler(client, caplog, create_and_sign_in_user):
     )
     change_url = reverse('admin:metro_failedmessage_changelist')
     data = {'action': 'retry', '_selected_action': [content.id]}
-    x = client.post(change_url, data, follow=True)
-    assert x.status_code == 200
+    response = client.post(change_url, data, follow=True)
+    assert response.status_code == 200
     assert len([x.message for x in caplog.records if x.message == 'No handler found for 1']) == 1
 
 
@@ -69,8 +69,8 @@ def test_admin_action_handler_found(client, caplog, create_and_sign_in_user, moc
 
         change_url = reverse('admin:metro_failedmessage_changelist')
         data = {'action': 'retry', '_selected_action': [content.id]}
-        x = client.post(change_url, data, follow=True)
-        assert x.status_code == 200
+        response = client.post(change_url, data, follow=True)
+        assert response.status_code == 200
         assert len([x.message for x in caplog.records if x.message == 'Attempting to retry id 1']) == 1
     assert FailedMessage.objects.get(id=2)  # Prev message should fail
     with pytest.raises(FailedMessage.DoesNotExist):
@@ -91,8 +91,8 @@ def test_admin_action_failed_retry(client, caplog, create_and_sign_in_user, mock
         )
         change_url = reverse('admin:metro_failedmessage_changelist')
         data = {'action': 'retry', '_selected_action': [content.id]}
-        x = client.post(change_url, data, follow=True)
-        assert x.status_code == 200
+        response = client.post(change_url, data, follow=True)
+        assert response.status_code == 200
         assert len([x.message for x in caplog.records if x.message == 'Attempting to retry id 1']) == 1
         assert (
             len(
