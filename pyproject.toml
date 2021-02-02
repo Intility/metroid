@@ -16,6 +16,11 @@ pre-commit = "^2.9.3"
 python-decouple = "^3.4"
 redis = "^3.5.3"
 black = "^20.8b1"
+pytest = "^6.2.2"
+pytest-cov = "^2.11.1"
+pytest-django = "^4.1.0"
+pytest-asyncio = "^0.14.0"
+pytest-mock = "^3.5.1"
 
 [tool.black]
 line-length = 120
@@ -42,6 +47,12 @@ sections = [
     'LOCALFOLDER'
 ]
 known_django = ['django']
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = 'demoproj.settings'
+log_cli_format = '%(levelname)s %(asctime)s [%(correlation_id)s] %(name)s %(message)s'
+log_cli = true
+log_cli_level = 'DEBUG'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

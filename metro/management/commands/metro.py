@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from asyncio.exceptions import InvalidStateError
 from asyncio.tasks import Task
 
 from django.core.management.base import BaseCommand
@@ -40,13 +39,14 @@ class Command(BaseCommand):
         for task in done:
             try:
                 raise task.exception()  # type: ignore # We do this to use `logger.exception` which enables trace nicely
-            except InvalidStateError:
+            except TypeError:
                 logger.critical('Task %s ended early without an exception', task)
             except Exception as error:
                 logger.exception('Exception in subscription task %s. Exception: %s', task, error)
 
         for task in pending:
             # cancel all remaining running tasks. This kills the service (and container)
+            logger.info('Cancelling pending task %s', task)
             task.cancel()
 
     def handle(self, *args: None, **options) -> None:
