@@ -7,6 +7,7 @@ from azure.servicebus import ServiceBusReceivedMessage, TransportType
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
 from metro.typing import Handler
+from metro.utils import get_subject_pattern
 
 logger = logging.getLogger('metro')
 
@@ -57,7 +58,8 @@ async def subscribe_to_topic(
                 handled_message = False
                 for handler in handlers:
                     subject = handler.get('subject')
-                    if subject == loaded_message.get('subject'):
+                    subject_pattern = get_subject_pattern(subject=subject)
+                    if subject_pattern.match(loaded_message.get('subject')):
                         logger.info('Subject matching: %s', handler.get('subject'))
                         handled_message = True
                         await sync_to_async(handler.get('handler_function').apply_async)(  # type: ignore

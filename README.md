@@ -63,6 +63,18 @@ METRO = {
     ]
 }
 ```
+The handlers subject can be a reggex pattern or a string. If a string with characters that need to be escaped is detected by re.compile, they will be escaped. The pattern matching for the subject works in this scenarios:
+
+`'subject': 'MetroDemo/Type/GeekJokes'` would match all messages with subject:`'MetroDemo/Type/GeekJokes' `
+
+`'subject': 'MetroDemo/Type/GeekJokes[cool]'` would match all messages with subject:`'MetroDemo/Type/GeekJokes[cool]'`
+
+`'subject': '^MetroDemo/Type/.*$'` would match all messages with subjects that start with: `MetroDemo/Type/`
+
+`'subject': '^MetroDemo/Type/.*$123456'` would match all messages with subjects that start with: `MetroDemo/Type/`. It will not match strings that have number after '$' as it is a valid reggex character.
+
+
+
 
 2. Configure `Django-GUID`  by adding the app to your installed apps, to your middlewares and configuring logging
 as described [here](https://github.com/snok/django-guid#configuration).
