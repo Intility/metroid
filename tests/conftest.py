@@ -5,6 +5,7 @@ from django.test import override_settings
 import pytest
 from demoproj.demoapp.services import my_broken_task, my_func
 from metro.config import Settings
+from tests.functional.test_celery import a_random_task
 from tests.mock_service_bus import ServiceBusMock
 
 
