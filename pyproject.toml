@@ -54,6 +54,10 @@ log_cli_format = '%(levelname)s %(asctime)s [%(correlation_id)s] %(name)s %(mess
 log_cli = true
 log_cli_level = 'DEBUG'
 
+[tool.coverage.report]
+omit = ['metro/apps.py']
+
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

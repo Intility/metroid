@@ -5,7 +5,6 @@ import json
 class Message:
     def __init__(self, i, **kwargs):
         self.error = kwargs.get('error', False)
-        print(f'{self.error=}')
         self.i = i
         if self.i == 0:
             self.message = {
@@ -62,7 +61,7 @@ class ReceiverMock:
         if i >= 5:
             raise StopAsyncIteration
         self.i += 1
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.2)
         if i == 4 and self.error:
             return Message(4, error=True)
         return Message(i)

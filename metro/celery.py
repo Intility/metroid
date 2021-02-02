@@ -43,5 +43,6 @@ class MetroTask(Task):
                 correlation_id=correlation_id or '',
             )
             logger.info('Saved failed message to database.')
-        except Exception as error:
+        except Exception as error:  # pragma: no cover
+            # Should be impossible for this to happen (famous last words), but a nice failsafe.
             logger.exception('Unable to save Metro message. Error: %s', error)
