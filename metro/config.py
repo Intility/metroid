@@ -25,11 +25,13 @@ class Settings:
                     'connection_string': 'Endpoint=sb://...',
                     'handlers': [
                         {
-                            'subject': 'MetroDemo/Type/GeekJokes',
+                            'subject': '^MetroDemo/Type/.*',
+                            'regex': True,
                             'handler_function': function_to_call,
                         },
                         {
-                            'subject': 'MetroDemo/Type/DadJokes',
+                            'subject': 'MetroDemo/Type/DadJokes.Created',
+                            'regex': False,
                             'handler_function': another_func_to_call
                         }
                     ]
@@ -61,8 +63,7 @@ class Settings:
                 subscription.get('topic_name') == topic_name
                 and subscription.get('subscription_name') == subscription_name
             ):
-                # TODO: Fix mypy
-                return subscription['connection_string']  # type: ignore
+                return subscription['connection_string']
         return None
 
     def get_handler_function(self, *, topic_name: str, subscription_name: str, subject: str) -> Optional[Callable]:

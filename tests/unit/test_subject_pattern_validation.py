@@ -29,7 +29,7 @@ class TestSubjectPatternValidation(TestCase):
         """
         Tests if the pattern matches the subject provided in string format.
         """
-        subject_in_message = 'tests/haha'
+        subject_in_message = 'tests/haha.Create'
         pattern = get_subject_pattern(subject_in_message)
         self.assertIsNotNone(pattern.match(subject_in_message))
 
