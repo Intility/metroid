@@ -86,7 +86,7 @@ class Settings:
         TODO: Harden it
         """
         if not isinstance(self.subscriptions, list):
-            raise ImproperlyConfigured('Subscriptions must be a list')
+            raise ImproperlyConfigured('Subscriptions must be a :qlist')
         for subscription in self.subscriptions:
             topic_name = subscription.get('topic_name', None)
             subscription_name = subscription.get('subscription_name', None)
