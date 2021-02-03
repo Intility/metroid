@@ -1,13 +1,12 @@
 import json
 import logging
-from typing import Callable, Union
 
 from asgiref.sync import sync_to_async
 from azure.servicebus import ServiceBusReceivedMessage, TransportType
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
 from metro.typing import Handler
-from metro.utils import get_subject_pattern
+from metro.utils import match_handler_subject
 
 logger = logging.getLogger('metro')
 
@@ -16,7 +15,7 @@ async def subscribe_to_topic(
     connection_string: str,
     topic_name: str,
     subscription_name: str,
-    handlers: Union[list[Handler], list[dict[str, Union[str, Callable]]]],
+    handlers: list[Handler],
 ) -> None:
     """
     Subscribe to a topic, with a connection string
@@ -57,9 +56,13 @@ async def subscribe_to_topic(
                 )
                 handled_message = False
                 for handler in handlers:
-                    subject = handler.get('subject')
-                    subject_pattern = get_subject_pattern(subject=subject)
-                    if subject_pattern.match(loaded_message.get('subject')):
+                    subject = handler['subject']
+                    subject_is_regex = handler['regex']
+                    message_subject = loaded_message.get('subject', '')
+
+                    if match_handler_subject(
+                        subject=subject, message_subject=message_subject, is_regex=subject_is_regex
+                    ):
                         logger.info('Subject matching: %s', handler.get('subject'))
                         handled_message = True
                         await sync_to_async(handler.get('handler_function').apply_async)(  # type: ignore

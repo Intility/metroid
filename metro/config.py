@@ -1,4 +1,5 @@
-from typing import Callable, Optional, Union
+from typing import Optional, Union, Callable
+
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
@@ -103,14 +104,18 @@ class Settings:
                 raise ImproperlyConfigured(
                     f'Invalid connection string: {connection_string}. Must start with Endpoint=sb://'
                 )
-            if not isinstance(handlers, dict):
-                raise ImproperlyConfigured(f'Handler function {handlers} must be a dict')
+            if not isinstance(handlers, list):
+                raise ImproperlyConfigured(f'Handler function {handlers} must be a list')
             for handler in handlers:
-                subject = handler.get('subject')
-                handler_function = handler.get('handler_function')
+                if not isinstance(handler, dict):
+                    raise ImproperlyConfigured(f'{handlers} must contain dict values, got: {handler}')
+
+                subject = handler['subject']
                 if not isinstance(subject, str):
                     raise ImproperlyConfigured(f'Handler subject {subject} for {topic_name} must be a string')
-                if not isinstance(handler_function, Callable):
+                handler_function = handler['handler_function']
+
+                if not callable(handler_function):
                     raise ImproperlyConfigured(
                         f'Handler function {handler_function} for {topic_name} must be a Callable'
                     )

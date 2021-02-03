@@ -1,13 +1,25 @@
 import re
-from typing import Pattern, Union, Callable, Any
+import logging
+from django.core.exceptions import ImproperlyConfigured
+
+logger = logging.getLogger('metro')
 
 
-def get_subject_pattern(subject: Union[str, None, Callable[..., Any]]) -> Pattern:
+def match_handler_subject(
+    subject: str,
+    message_subject: str,
+    is_regex: bool,
+) -> bool:
     """
-    Returns a reggex compile object which can be used to match the subject. A valid reggex pattern is compiled,
-    or a string is escaped. There are some scenarios where it might not match, check the test "test_bogus_string".
+    Checks if the provided message subject matches the handler's subject. Performs a match by using the regular
+    expression, or compares strings based on  handler settings defined in settings.py.
+
     """
-    try:
-        return re.compile(subject)
-    except re.error:
-        return re.compile(re.escape(str(subject)))
+    if is_regex:
+        try:
+            pattern = re.compile(subject)
+            return bool(re.match(pattern=pattern, string=message_subject))
+        except re.error:
+            raise ImproperlyConfigured(f'Provided regex pattern: {subject} is invalid.')
+    else:
+        return subject == message_subject

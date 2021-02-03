@@ -58,21 +58,16 @@ METRO = {
             'topic_name': 'metro-demo',
             'subscription_name': 'sub-metrodemo-metrodemoerfett',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
-            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes', 'handler_function': my_func}],
+            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes','regex':False,'handler_function': my_func}],
         },
     ]
 }
 ```
-The handlers subject can be a reggex pattern or a string. If a string with characters that need to be escaped is detected by re.compile, they will be escaped. The pattern matching for the subject works in this scenarios:
+The handlers subject can be a regular expression  or a string. If a regular expression is provided, the variable regex must be set to True, for example: 
+ ```python
+             'handlers': [{'subject': r'^MetroDemo/Type/.*$','regex':True,'handler_function': my_func}],
 
-`'subject': 'MetroDemo/Type/GeekJokes'` would match all messages with subject:`'MetroDemo/Type/GeekJokes' `
-
-`'subject': 'MetroDemo/Type/GeekJokes[cool]'` would match all messages with subject:`'MetroDemo/Type/GeekJokes[cool]'`
-
-`'subject': '^MetroDemo/Type/.*$'` would match all messages with subjects that start with: `MetroDemo/Type/`
-
-`'subject': '^MetroDemo/Type/.*$123456'` would match all messages with subjects that start with: `MetroDemo/Type/`. It will not match strings that have number after '$' as it is a valid reggex character.
-
+ ```
 
 
 

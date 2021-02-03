@@ -3,6 +3,7 @@ from typing import Callable, TypedDict
 
 class Handler(TypedDict):
     subject: str
+    regex: bool
     handler_function: Callable
 
 
