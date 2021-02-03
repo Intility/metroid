@@ -15,7 +15,7 @@ def create_and_sign_in_user(client):
     return
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_subscriptions_admin(monkeypatch):
     with override_settings(
         METRO={
