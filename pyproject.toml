@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metro"
-version = "0.1.0"  # Remember to change in __init__.py as well
+version = "0.1.1"  # Remember to change in __init__.py as well
 description = "Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
 
