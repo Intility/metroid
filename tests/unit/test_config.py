@@ -86,7 +86,7 @@ def test_subscriptions_is_not_list_exception():
             invalid_settings = Settings()
             invalid_settings.validate()
 
-        assert str(e.value) == 'Subscriptions must be a :qlist'
+        assert str(e.value) == 'Subscriptions must be a list'
 
 
 def test_topic_name_is_not_str_exception():

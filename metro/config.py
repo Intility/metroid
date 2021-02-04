@@ -85,10 +85,9 @@ class Settings:
     def validate(self) -> None:
         """
         Validates all settings
-        TODO: Harden it
         """
         if not isinstance(self.subscriptions, list):
-            raise ImproperlyConfigured('Subscriptions must be a :qlist')
+            raise ImproperlyConfigured('Subscriptions must be a list')
         for subscription in self.subscriptions:
             topic_name = subscription.get('topic_name', None)
             subscription_name = subscription.get('subscription_name', None)

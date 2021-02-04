@@ -12,6 +12,7 @@ notes
 .coverage
 htmlcov/
 db.sqlite3
+coverage.xml
 
 # celery
 celerybeat-*
