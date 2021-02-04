@@ -21,7 +21,7 @@ test:
 
 push-to-pypi:
   stage: pypi
-  image: python:3.9-slim-stretch
+  image: python:3.9
   script:
     - apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y git
     - pip install poetry
