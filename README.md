@@ -3,6 +3,11 @@
 [![Celery](https://img.shields.io/badge/celery-5.0.0+%20-blue.svg)](https://docs.celeryproject.org/en/stable/)
 [![Django-GUID](https://img.shields.io/badge/django--guid-3.2.0+-blue.svg)](https://github.com/snok/django-guid/)
 
+
+[![coverage report](***REMOVED***)](***REMOVED***) 
+[![pipeline status](***REMOVED***)](***REMOVED***)
+
+
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)

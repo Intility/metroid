@@ -3,12 +3,17 @@ from django.test import override_settings
 import pytest
 from demoproj.demoapp.services import my_broken_task, my_func
 from metro.config import Settings
-from tests.mock_service_bus import ServiceBusMock
+from tests.mock_service_bus import service_mock, service_mock_error
 
 
-@pytest.fixture(autouse=True)
-def mock_service_bus_client(mocker):
-    mocker.patch('metro.subscribe.ServiceBusClient', ServiceBusMock)
+@pytest.fixture
+def mock_service_bus_client_ok(mocker):
+    return mocker.patch('metro.subscribe.ServiceBusClient', service_mock)
+
+
+@pytest.fixture
+def mock_service_bus_client_failure(mocker):
+    return mocker.patch('metro.subscribe.ServiceBusClient', service_mock_error)
 
 
 @pytest.fixture(autouse=True)

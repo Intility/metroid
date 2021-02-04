@@ -1,6 +1,7 @@
 from django.test import override_settings
 
 import pytest
+from azure.servicebus import TransportType
 from celery.app import shared_task
 from metro.celery import MetroTask
 from metro.subscribe import subscribe_to_topic
@@ -12,7 +13,7 @@ def my_task(**kwargs):
 
 
 @pytest.mark.asyncio
-async def test_subscription(caplog):
+async def test_subscription(caplog, mock_service_bus_client_ok):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):  # Runs celery in same thread without workers and stuff
         await subscribe_to_topic(
             **{
@@ -26,6 +27,9 @@ async def test_subscription(caplog):
             }
         )
     log_messages = [x.message for x in caplog.records]
+    mock_service_bus_client_ok.from_connection_string.assert_called_with(
+        conn_str='my long connection string', transport_type=TransportType.AmqpOverWebsocket
+    )
     # This is kinda dumb, as it makes us have to rewrite test if order of logs changes, but it's the easiest way to
     # actually confirm logic.
     # We expect two tasks to be started with the two subjects, and three messages to be ignored
@@ -38,7 +42,7 @@ async def test_subscription(caplog):
 
 
 @pytest.mark.asyncio
-async def test_faulty_metro_data(caplog):
+async def test_faulty_metro_data(caplog, mock_service_bus_client_failure):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
         await subscribe_to_topic(
             **{
@@ -51,6 +55,8 @@ async def test_faulty_metro_data(caplog):
                 ],
             }
         )
-
+    mock_service_bus_client_failure.from_connection_string.assert_called_with(
+        conn_str='my long connection string', transport_type=TransportType.AmqpOverWebsocket
+    )
     log_messages = [x.message for x in caplog.records]
     assert len([message for message in log_messages if 'Unable to decode message' in message]) == 1

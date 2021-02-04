@@ -1,5 +1,6 @@
 import asyncio
 import json
+from unittest.mock import AsyncMock, MagicMock, Mock
 
 
 class Message:
@@ -87,8 +88,29 @@ class ServiceBusMock:
     def from_connection_string(cls, conn_str, transport_type):
         return cls(conn_str, transport_type)
 
-    @staticmethod
-    def get_subscription_receiver(topic_name, subscription_name):
+    def get_subscription_receiver(self, topic_name, subscription_name):
         if topic_name == 'error':
-            return ReceiverMock(error=True)
-        return ReceiverMock()
+            return AsyncMock(ReceiverMock(error=True))
+        return AsyncMock(ReceiverMock())
+
+
+# Create MagicMock with specs of our instances
+# If this is confusing, it's because it is - and it's not really documented.
+# https://bugs.python.org/issue40406
+service_mock = MagicMock()
+service_mock.configure_mock(
+    **{
+        'from_connection_string.return_value.__aenter__.return_value': MagicMock(
+            ServiceBusMock(), **{'get_subscription_receiver.return_value.__aenter__.return_value': ReceiverMock()}
+        )
+    }
+)
+service_mock_error = MagicMock()
+service_mock_error.configure_mock(
+    **{
+        'from_connection_string.return_value.__aenter__.return_value': MagicMock(
+            ServiceBusMock(),
+            **{'get_subscription_receiver.return_value.__aenter__.return_value': ReceiverMock(error=True)},
+        )
+    }
+)
