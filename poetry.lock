@@ -444,7 +444,7 @@ dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "pre-commit"
-version = "2.10.0"
+version = "2.10.1"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -682,7 +682,7 @@ python-versions = "*"
 
 [[package]]
 name = "uamqp"
-version = "1.2.13"
+version = "1.2.14"
 description = "AMQP 1.0 Client Library for Python"
 category = "main"
 optional = false
@@ -935,8 +935,8 @@ pluggy = [
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
 pre-commit = [
-    {file = "pre_commit-2.10.0-py2.py3-none-any.whl", hash = "sha256:391ed331fdd0a21d0be48c1b9919921e9d372dfd60f6dc77b8f01dd6b13161c1"},
-    {file = "pre_commit-2.10.0.tar.gz", hash = "sha256:f413348d3a8464b77987e36ef6e02c3372dadb823edf0dfe6fb0c3dc2f378ef9"},
+    {file = "pre_commit-2.10.1-py2.py3-none-any.whl", hash = "sha256:16212d1fde2bed88159287da88ff03796863854b04dc9f838a55979325a3d20e"},
+    {file = "pre_commit-2.10.1.tar.gz", hash = "sha256:399baf78f13f4de82a29b649afd74bef2c4e28eb4f021661fc7f29246e8c7a3a"},
 ]
 prompt-toolkit = [
     {file = "prompt_toolkit-3.0.14-py3-none-any.whl", hash = "sha256:c96b30925025a7635471dc083ffb6af0cc67482a00611bd81aeaeeeb7e5a5e12"},
@@ -1107,39 +1107,39 @@ typing-extensions = [
     {file = "typing_extensions-3.7.4.3.tar.gz", hash = "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"},
 ]
 uamqp = [
-    {file = "uamqp-1.2.13-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:6c4ed643732c6cb658f5ab298b21610a6c17912e4a02ada3ea331af937a043d3"},
-    {file = "uamqp-1.2.13-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:f2c86815e499612a4e744c11743df955807e053c8244908e744f4b9553599a78"},
-    {file = "uamqp-1.2.13-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:de6f61e51bd83925b8a7139a2fb05cb328870b872d9338d561b1f94f0d0e78b0"},
-    {file = "uamqp-1.2.13-cp27-cp27m-win32.whl", hash = "sha256:95edd0986a61ee23d7dac668f0aefd4a84f9bd99c463c8bd14e5377d406185d3"},
-    {file = "uamqp-1.2.13-cp27-cp27m-win_amd64.whl", hash = "sha256:37e4b00f512b427b63a02f765b4f277ba7a64b7e9500fc98f8408ace977eeac2"},
-    {file = "uamqp-1.2.13-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:41b179c36ace9ec553ffbc410fdaf1aa889aab4a92b832bd2f8c716455efacc4"},
-    {file = "uamqp-1.2.13-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:fef89fc27d3880d2512ec3146c7855f8a135baba28e9f53bcc97ef616b51e755"},
-    {file = "uamqp-1.2.13-cp35-cp35m-macosx_10_9_intel.whl", hash = "sha256:5b5116584ec60c5dbf3161b3ea78a078a15c52f7f45335fcd7bffdbe4dde5546"},
-    {file = "uamqp-1.2.13-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:62bc3b2f68f2f13496f080ff0f126e2cfd90ba94a3cf27f19a86c6b224bdb487"},
-    {file = "uamqp-1.2.13-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:b3081ed6ab8a345f40c2874c193b30bcac9fbf6c54db73b481af28fc0a8e50d8"},
-    {file = "uamqp-1.2.13-cp35-cp35m-win32.whl", hash = "sha256:7a4ae0051088a78abfe80312f428052f7ba0ce214d097a1466543bf80525c021"},
-    {file = "uamqp-1.2.13-cp35-cp35m-win_amd64.whl", hash = "sha256:ebfb0b8bed3cb0456c08b90bec24dad594a67baadf82e2737a0372019713e62f"},
-    {file = "uamqp-1.2.13-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:ae4a4d99dabb40cf2cbfd81b6189d946a286607bb0194d21113143dad309ff1f"},
-    {file = "uamqp-1.2.13-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:afa3ca5abbd7286a02ea446e6b5355197cb38a5fd657ba9259ad137cc05c705b"},
-    {file = "uamqp-1.2.13-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:1ba4d3c40fe5a7614b42dcfc728fa50040024bb6fd3051300f221ed62e506ec0"},
-    {file = "uamqp-1.2.13-cp36-cp36m-win32.whl", hash = "sha256:88a77b5e81d486ca443cd6f9bc3146421b9a8b41082cfda446de6d36058c1ae6"},
-    {file = "uamqp-1.2.13-cp36-cp36m-win_amd64.whl", hash = "sha256:9fb984c1995b25f7acf0bb0ed842f006f44e92cf40b59361d42a455deb28bb90"},
-    {file = "uamqp-1.2.13-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:63a468d5cf5ef70e84a193f9c058ec77b3febfc6a6e428f34c3141a64ac01159"},
-    {file = "uamqp-1.2.13-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:7543e7e7d596cd74a6d96dcf7f5b88d2bdc48b4b74ba9fc878c7f45c8e2b37a2"},
-    {file = "uamqp-1.2.13-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:be88fcfbfda4301c0869dc48db7eb0c9390e1bb57dd87ae0d1b3435c6edf1960"},
-    {file = "uamqp-1.2.13-cp37-cp37m-win32.whl", hash = "sha256:2891a5be83bb6ef87729d6d2efd0835709784bbd5c7af8da5509fd5e42f713ba"},
-    {file = "uamqp-1.2.13-cp37-cp37m-win_amd64.whl", hash = "sha256:addfb6d937425b0021ff92b58d251d6fd8dbf1eee045a34b580dd261e44bc24d"},
-    {file = "uamqp-1.2.13-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:90b1d67a0cdab641dfc2ee3fcb48e80ff168276d511d450a397d6d9a9d100ce9"},
-    {file = "uamqp-1.2.13-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:8a7ccf85569a9d9467b9b0747e5bb179f8e9160934e3ec1024c861aea7355119"},
-    {file = "uamqp-1.2.13-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:0e601aabdf8fc275410a84429a5a61d7ebf2a6cd8343561bc455e0eaa0cd266f"},
-    {file = "uamqp-1.2.13-cp38-cp38-win32.whl", hash = "sha256:a9c4fcd9f487fe34572a4f2ce339178221f584a2b7f9deffc8843ca294413ab8"},
-    {file = "uamqp-1.2.13-cp38-cp38-win_amd64.whl", hash = "sha256:051723b39c0b6a6bec67484ebc2d4d68dd465452bf4c7fd1df5906e73572862d"},
-    {file = "uamqp-1.2.13-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:dd3e58e723fe90e241e3c99d5a2bbf018d62245377dc864ea467f1ce60e15dd3"},
-    {file = "uamqp-1.2.13-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:4059a73c42b69916601e38268692321df1e48b3f584f1e9d74f493a22c47c2eb"},
-    {file = "uamqp-1.2.13-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:8a072be11fcef9306fc363fe3619204594778008a4b5ba77cc83960a785c59dd"},
-    {file = "uamqp-1.2.13-cp39-cp39-win32.whl", hash = "sha256:2ec5c0657491a5167f55ac211c6810d0ee03de945817b9669670a97433f680ee"},
-    {file = "uamqp-1.2.13-cp39-cp39-win_amd64.whl", hash = "sha256:c7aa6f71ab4213eda5afebd41b866492478cbc03ec733cf4e137547adb23135c"},
-    {file = "uamqp-1.2.13.tar.gz", hash = "sha256:cc35057bfc8c093867faa26a0de90cad41c47f58251b1070e298a81312cba2a8"},
+    {file = "uamqp-1.2.14-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:d999ffc95fb60f2d1c427231fe2bcc1d22deed44602d38ac80e1010a79f599a4"},
+    {file = "uamqp-1.2.14-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:da03fc570708731c01f1d0637eff1b8934dd600cd8805e4d279875402b91d635"},
+    {file = "uamqp-1.2.14-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:15a755d3500fdb63d91d9b1f847b9c1f95624648ee1b057021ce104c4d86a787"},
+    {file = "uamqp-1.2.14-cp27-cp27m-win32.whl", hash = "sha256:9fc8ac4b0b06114c9f9f0a7cad6737c91d5658509b3efd9a9e5a8d2f6eec8222"},
+    {file = "uamqp-1.2.14-cp27-cp27m-win_amd64.whl", hash = "sha256:1789b5ea8ec42103fd532726d0c338ae48584ce93298d72f87b194776746e3bc"},
+    {file = "uamqp-1.2.14-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:b98e4be002245ec157c86f935a6cfee9374f1352a29748539c09d8d178305e1a"},
+    {file = "uamqp-1.2.14-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:6f8ba738ddbb7697c0435436eeafac96023caffecd288b157ee2715fe18048ae"},
+    {file = "uamqp-1.2.14-cp35-cp35m-macosx_10_9_intel.whl", hash = "sha256:c13dbff4ed0b29fbfb1a34d31ab8b00bdd9c9307fc866b9886abe6acee74d9fd"},
+    {file = "uamqp-1.2.14-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:54ffbaf9296621d5f99ee9647d8e0e95961befadd3be50132ba686232648d26f"},
+    {file = "uamqp-1.2.14-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:ec10368fdcedf08c304e3b4c6048d742429aa98925886ca8af80e8b97c1df594"},
+    {file = "uamqp-1.2.14-cp35-cp35m-win32.whl", hash = "sha256:7de68363862f90e4d478340f4e1713295fd1f9c27ab7b0c75ba95c1c0843cfb3"},
+    {file = "uamqp-1.2.14-cp35-cp35m-win_amd64.whl", hash = "sha256:f9248be663615f97949896f02985f40354c7bc6506bd6da4c55c792b1392330f"},
+    {file = "uamqp-1.2.14-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:2cb0927fd159cf3473fd9509bbb952f817e02cffef0f8360325ca58f4c6387eb"},
+    {file = "uamqp-1.2.14-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:3a782a5613021c5ecb8e7b6f2ee5f29fa0931aee76bd83febf3449b66cc1f6ac"},
+    {file = "uamqp-1.2.14-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:d18772a2c90755a92837d6d00c04326e8860d09555525f4472a60c2a9a9ca0c5"},
+    {file = "uamqp-1.2.14-cp36-cp36m-win32.whl", hash = "sha256:cfe6401ef9b6a88cd13338d643c42d8058f0f27f406ff685d73624cc664b4a7d"},
+    {file = "uamqp-1.2.14-cp36-cp36m-win_amd64.whl", hash = "sha256:c40f7d6f3c9a146dfbaa94d33d94490d0b157cadfeba9cf12fdcacd0b4d7d93b"},
+    {file = "uamqp-1.2.14-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:927ea93b420a0f6810637d89bec97d3d5bd7e862678c18829b89d0f490494f48"},
+    {file = "uamqp-1.2.14-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:6a903a688659cb90de89d35f8cb9e50c2bd34a2e8aa70c5be9ced6f0e598a19f"},
+    {file = "uamqp-1.2.14-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:2f699102aa1611793fc015a8312d20e71d7e8b1bd810dfe53df9a68f720acd67"},
+    {file = "uamqp-1.2.14-cp37-cp37m-win32.whl", hash = "sha256:c68b3d4624edbd785083aa24357c067185c6a8c96b60ccfb4cab0c6a21d23eaa"},
+    {file = "uamqp-1.2.14-cp37-cp37m-win_amd64.whl", hash = "sha256:f093be2ffac545c88c9967035ab31c251b220e7ebd17d4385c12cf24962d4ff9"},
+    {file = "uamqp-1.2.14-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:17fcb2a06c921b5d82000c67189324a233fdfb277dad4fa4f9c20f37495ecd6c"},
+    {file = "uamqp-1.2.14-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:4373eaa23300890f9f3fa6ace32ecb25afc3e226559448b14944345550c6dc3e"},
+    {file = "uamqp-1.2.14-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:2de49f2a55f1786970c227f7b05479d1a535bd319c640c0e6b4cb78b549e2b28"},
+    {file = "uamqp-1.2.14-cp38-cp38-win32.whl", hash = "sha256:a7680caa5458baf20fcc33e4496bc7d3dba3c44789dd2ab5af70985dca7d07e2"},
+    {file = "uamqp-1.2.14-cp38-cp38-win_amd64.whl", hash = "sha256:c2261c56ce99a77be56bc033fa8233e92a19c8282c4333d4305c737cedafc24a"},
+    {file = "uamqp-1.2.14-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:334991bb86a418442de1fd253603b274a07282f1af58bfcd2b43008d8c0c540f"},
+    {file = "uamqp-1.2.14-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:1b002466dadd09842aebdc67d06dde1600c1058dbf6a023e923d695be2e01b9c"},
+    {file = "uamqp-1.2.14-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:2149d52da7e487f71645501355a1a684721963250ed54ac7781426b06cbdb09c"},
+    {file = "uamqp-1.2.14-cp39-cp39-win32.whl", hash = "sha256:d73b8ddde256ec07377a47d94ead6687b29b50024d648ed6a83cee7b8997421e"},
+    {file = "uamqp-1.2.14-cp39-cp39-win_amd64.whl", hash = "sha256:e42b73b2083cdc7b9a3ff57af166cc9eff0030725fe8bd47b7500d6c479428f6"},
+    {file = "uamqp-1.2.14.tar.gz", hash = "sha256:eadb6994e632090d0c75d4b275a343265fdda85609182784c078d5021d6db5b1"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.3-py2.py3-none-any.whl", hash = "sha256:1b465e494e3e0d8939b50680403e3aedaa2bc434b7d5af64dfd3c958d7f5ae80"},

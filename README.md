@@ -1,6 +1,7 @@
 [![Py](https://img.shields.io/badge/python-v3.9+-blue.svg)](https://python.org)
 [![Django](https://img.shields.io/badge/django-3.1.1+%20-blue.svg)](https://djangoproject.com)
 [![Celery](https://img.shields.io/badge/celery-5.0.0+%20-blue.svg)](https://docs.celeryproject.org/en/stable/)
+[![Azure-Service](https://img.shields.io/badge/azure--servicebus-7.0.1+%20-blue.svg)](https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/servicebus/azure-servicebus)
 [![Django-GUID](https://img.shields.io/badge/django--guid-3.2.0+-blue.svg)](https://github.com/snok/django-guid/)
 
 
