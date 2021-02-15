@@ -64,11 +64,17 @@ METRO = {
             'topic_name': 'metro-demo',
             'subscription_name': 'sub-metrodemo-metrodemoerfett',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
-            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes','regex':False,'handler_function': my_func}],
+            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes','regex':False,'handler_function': 'demoproj.demoapp.services.my_func'}],
         },
     ]
 }
+
 ```
+
+The `handler_function` is defined by providing the full dotted path as a string. For example,`from demoproj.demoapp.services import my_func` is provided as: `'demoproj.demoapp.services.my_func'`.
+
+
+
 The handlers subject can be a regular expression  or a string. If a regular expression is provided, the variable regex must be set to True, for example: 
  ```python
              'handlers': [{'subject': r'^MetroDemo/Type/.*$','regex':True,'handler_function': my_func}],
