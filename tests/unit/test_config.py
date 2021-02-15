@@ -227,13 +227,13 @@ def test_subject_is_not_str_exception():
         assert str(e.value) == f'Handler subject {subject} for {topic_name} must be a string'
 
 
-def test_handler_function_is_not_callable_exception():
+def test_handler_function_is_not_str_exception():
     """
     Provides connection_string in an invalid format, and checks if the correct exception is thrown.
     """
     topic_name = 'test'
     subject = 'test/banonza'
-    handler_function = 'i am a function'
+    handler_function = test_subject_is_not_str_exception()
     with override_settings(
         METRO={
             'subscriptions': [
@@ -268,7 +268,7 @@ def test_no_exception_is_thrown():
                         'handlers': [
                             {
                                 'subject': 'Test/Django/Module',
-                                'handler_function': test_handler_function_is_not_callable_exception,
+                                'handler_function': 'tests.functional.test_celery.a_random_task',
                             },
                         ],
                     }

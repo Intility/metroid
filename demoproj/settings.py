@@ -129,7 +129,6 @@ DJANGO_GUID = {
     ],
 }
 
-from demoproj.demoapp.services import my_func, my_broken_task  # noqa: E402
 
 METRO = {
     'subscriptions': [
@@ -138,8 +137,16 @@ METRO = {
             'subscription_name': 'sub-test-djangomoduletest',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
             'handlers': [
-                {'subject': 'Test/Django/Module', 'regex': False, 'handler_function': my_func},
-                {'subject': r'^Exception\/.*$', 'regex': True, 'handler_function': my_broken_task},
+                {
+                    'subject': 'Test/Django/Module',
+                    'regex': False,
+                    'handler_function': 'demoproj.demoapp.services.my_func',
+                },
+                {
+                    'subject': r'^Exception\/.*$',
+                    'regex': True,
+                    'handler_function': 'demoproj.demoapp.services.my_broken_task',
+                },
             ],
         },
     ]

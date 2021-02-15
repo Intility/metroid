@@ -1,3 +1,5 @@
+import logging
+
 from django.test import override_settings
 
 import pytest
@@ -6,9 +8,14 @@ from metro.celery import MetroTask
 from metro.models import FailedMessage
 
 
-@shared_task(base=MetroTask)
+@shared_task(base=MetroTask, name='tests.functional.test_celery.a_random_task')
 def a_random_task(*, message: dict, topic_name: str, subscription_name: str, subject: str):
     raise ValueError('My mocked error :)')
+
+
+@shared_task(base=MetroTask, name='tests.functional.test_celery.error_task')
+def error_task(*, message: dict, topic_name: str, subscription_name: str, subject: str):
+    lambda x: None
 
 
 @pytest.mark.django_db

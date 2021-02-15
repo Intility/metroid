@@ -5,7 +5,6 @@ from django.urls import reverse
 import pytest
 from metro.config import Settings
 from metro.models import FailedMessage
-from tests.functional.test_celery import a_random_task
 
 
 @pytest.fixture
@@ -25,8 +24,8 @@ def mock_subscriptions_admin(monkeypatch):
                     'subscription_name': 'sub-test-djangomoduletest',
                     'connection_string': 'my long connection string',
                     'handlers': [
-                        {'subject': 'MockedTask', 'handler_function': a_random_task},
-                        {'subject': 'ErrorTask', 'handler_function': lambda x: None},
+                        {'subject': 'MockedTask', 'handler_function': 'tests.functional.test_celery.a_random_task'},
+                        {'subject': 'ErrorTask', 'handler_function': 'tests.functional.test_celery.error_task'},
                     ],
                 },
             ]
@@ -66,7 +65,6 @@ def test_admin_action_handler_found(client, caplog, create_and_sign_in_user, moc
             traceback='long trace',
             correlation_id='',
         )
-
         change_url = reverse('admin:metro_failedmessage_changelist')
         data = {'action': 'retry', '_selected_action': [content.id]}
         response = client.post(change_url, data, follow=True)

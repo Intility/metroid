@@ -21,8 +21,16 @@ async def test_subscription(caplog, mock_service_bus_client_ok):
                 'subscription_name': 'sub-test-mocktest',
                 'connection_string': 'my long connection string',
                 'handlers': [
-                    {'subject': 'Test/Django/Module', 'regex': False, 'handler_function': my_task},
-                    {'subject': 'Exception/Django/Module', 'regex': False, 'handler_function': my_task},
+                    {
+                        'subject': 'Test/Django/Module',
+                        'regex': False,
+                        'handler_function': 'tests.functional.test_subscribe.my_task',
+                    },
+                    {
+                        'subject': 'Exception/Django/Module',
+                        'regex': False,
+                        'handler_function': 'tests.functional.test_subscribe.my_task',
+                    },
                 ],
             }
         )
@@ -50,8 +58,16 @@ async def test_faulty_metro_data(caplog, mock_service_bus_client_failure):
                 'subscription_name': 'sub-test-mocktest',
                 'connection_string': 'my long connection string',
                 'handlers': [
-                    {'subject': 'Test/Django/Module', 'regex': False, 'handler_function': my_task},
-                    {'subject': 'Exception/Django/Module', 'regex': False, 'handler_function': my_task},
+                    {
+                        'subject': 'Test/Django/Module',
+                        'regex': False,
+                        'handler_function': 'tests.functional.test_subscribe.my_task',
+                    },
+                    {
+                        'subject': 'Exception/Django/Module',
+                        'regex': False,
+                        'handler_function': 'tests.functional.test_subscribe.my_task',
+                    },
                 ],
             }
         )

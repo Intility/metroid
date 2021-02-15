@@ -1,6 +1,5 @@
 from typing import Optional, Union, Callable
 
-
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 
@@ -114,9 +113,9 @@ class Settings:
                     raise ImproperlyConfigured(f'Handler subject {subject} for {topic_name} must be a string')
                 handler_function = handler['handler_function']
 
-                if not callable(handler_function):
+                if not isinstance(handler_function, str):
                     raise ImproperlyConfigured(
-                        f'Handler function {handler_function} for {topic_name} must be a Callable'
+                        f'Handler function:{handler_function} for {topic_name} must be a string and a valid dotted path'
                     )
 
 

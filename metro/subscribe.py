@@ -7,6 +7,7 @@ from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
 from metro.typing import Handler
 from metro.utils import match_handler_subject
+from django.utils.module_loading import import_string
 
 logger = logging.getLogger('metro')
 
@@ -65,7 +66,8 @@ async def subscribe_to_topic(
                     ):
                         logger.info('Subject matching: %s', handler.get('subject'))
                         handled_message = True
-                        await sync_to_async(handler.get('handler_function').apply_async)(  # type: ignore
+                        handler_function = import_string(handler.get('handler_function'))
+                        await sync_to_async(handler_function.apply_async)(  # type: ignore
                             kwargs={
                                 'message': loaded_message,
                                 'topic_name': topic_name,
