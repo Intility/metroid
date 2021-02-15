@@ -4,7 +4,6 @@ from django.http import HttpRequest
 from metro.models import FailedMessage
 from metro.config import settings
 import logging
-from django.utils.module_loading import import_string
 
 logger = logging.getLogger('metro')
 
@@ -37,9 +36,7 @@ class FailedMessageAdmin(admin.ModelAdmin):
                 try:
 
                     logger.info('Attempting to retry id %s', message.id)
-                    handler_function = import_string(handler)
-                    logger.info(f'Attempting for: {handler}--{handler_function}')
-                    handler_function.apply_async(  # type: ignore
+                    handler.apply_async(  # type: ignore
                         kwargs={
                             'message': message.message,
                             'topic_name': message.topic_name,

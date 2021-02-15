@@ -4,6 +4,7 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 
 from metro.typing import Subscription, Subscriptions
+from django.utils.module_loading import import_string
 
 
 class Settings:
@@ -78,7 +79,7 @@ class Settings:
             ):
                 for handler in subscription['handlers']:
                     if handler.get('subject') == subject:
-                        return handler.get('handler_function')
+                        return import_string(handler.get('handler_function'))
         return None
 
     def validate(self) -> None:

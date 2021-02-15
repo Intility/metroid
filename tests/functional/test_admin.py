@@ -24,8 +24,8 @@ def mock_subscriptions_admin(monkeypatch):
                     'subscription_name': 'sub-test-djangomoduletest',
                     'connection_string': 'my long connection string',
                     'handlers': [
-                        {'subject': 'MockedTask', 'handler_function': 'tests.functional.test_celery.a_random_task'},
-                        {'subject': 'ErrorTask', 'handler_function': 'tests.functional.test_celery.error_task'},
+                        {'subject': 'MockedTask', 'handler_function': 'demoproj.tasks.a_random_task'},
+                        {'subject': 'ErrorTask', 'handler_function': 'demoproj.tasks.error_task'},
                     ],
                 },
             ]

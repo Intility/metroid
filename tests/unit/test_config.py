@@ -233,7 +233,7 @@ def test_handler_function_is_not_str_exception():
     """
     topic_name = 'test'
     subject = 'test/banonza'
-    handler_function = test_subject_is_not_str_exception()
+    handler_function = None
     with override_settings(
         METRO={
             'subscriptions': [
@@ -250,7 +250,10 @@ def test_handler_function_is_not_str_exception():
             invalid_settings = Settings()
             invalid_settings.validate()
 
-        assert str(e.value) == f'Handler function {handler_function} for {topic_name} must be a Callable'
+        assert (
+            str(e.value)
+            == f'Handler function:{handler_function} for {topic_name} must be a string and a valid dotted path'
+        )
 
 
 def test_no_exception_is_thrown():
