@@ -229,7 +229,7 @@ def test_subject_is_not_str_exception():
 
 def test_handler_function_is_not_str_exception():
     """
-    Provides connection_string in an invalid format, and checks if the correct exception is thrown.
+    Provides handler_function in an invalid format, and checks if the correct exception is thrown.
     """
     topic_name = 'test'
     subject = 'test/banonza'
@@ -248,11 +248,89 @@ def test_handler_function_is_not_str_exception():
     ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
-            invalid_settings.validate()
+            invalid_settings.validate_import_strings()
+
+        assert str(e.value) == f'Handler function:{handler_function}' f'for {topic_name} must be a string'
+
+
+def test_handler_function_is_not_dotted_path_exception():
+    """
+    Provides handler_function in an invalid dotted path format, and checks if the correct exception is thrown.
+    """
+    topic_name = 'test'
+    subject = 'test/banonza'
+    handler_function = 'testtesttest'
+    with override_settings(
+        METRO={
+            'subscriptions': [
+                {
+                    'topic_name': topic_name,
+                    'subscription_name': 'coolest/sub/ever',
+                    'connection_string': 'Endpoint=sb://cool',
+                    'handlers': [{'subject': subject, 'handler_function': handler_function}],
+                }
+            ]
+        }
+    ):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate_import_strings()
+
+        assert str(e.value) == f'Handler function:{handler_function}' f' for {topic_name} is not a dotted function path'
+
+
+def test_handler_function_module_not_found_exception():
+    """
+    Provides handler_function with a non-existing module, and checks if the correct exception is thrown.
+    """
+    topic_name = 'test'
+    subject = 'test/banonza'
+    handler_function = 'test.test.test'
+    with override_settings(
+        METRO={
+            'subscriptions': [
+                {
+                    'topic_name': topic_name,
+                    'subscription_name': 'coolest/sub/ever',
+                    'connection_string': 'Endpoint=sb://cool',
+                    'handlers': [{'subject': subject, 'handler_function': handler_function}],
+                }
+            ]
+        }
+    ):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate_import_strings()
+
+        assert str(e.value) == f'Handler function:{handler_function}' f' for {topic_name} cannot find module'
+
+
+def test_handler_function_method_not_found_exception():
+    """
+    Provides handler_function with a non-existing method, and checks if the correct exception is thrown.
+    """
+    topic_name = 'test'
+    subject = 'test/banonza'
+    handler_function = 'demoproj.tasks.notfound'
+    with override_settings(
+        METRO={
+            'subscriptions': [
+                {
+                    'topic_name': topic_name,
+                    'subscription_name': 'coolest/sub/ever',
+                    'connection_string': 'Endpoint=sb://cool',
+                    'handlers': [{'subject': subject, 'handler_function': handler_function}],
+                }
+            ]
+        }
+    ):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate_import_strings()
 
         assert (
-            str(e.value)
-            == f'Handler function:{handler_function} for {topic_name} must be a string and a valid dotted path'
+            str(e.value) == f'Handler function:{handler_function}'
+            f' for {topic_name} cannot be imported. Verify that the dotted path points to a function'
         )
 
 

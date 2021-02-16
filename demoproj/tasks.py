@@ -2,7 +2,7 @@ from demoproj.celery import app
 from metro.celery import MetroTask
 
 
-@app.task(base=MetroTask, name='demoproj.tasks.a_random_task')
+@app.task(base=MetroTask)
 def a_random_task(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> Exception:
     """
     Mocked function for tests. Matches on the subject 'MockedTask'.
@@ -18,7 +18,7 @@ def error_task(*, message: dict, topic_name: str, subscription_name: str, subjec
     lambda x: None
 
 
-@app.task(base=MetroTask, name='demoproj.tasks.my_task')
+@app.task(base=MetroTask)
 def my_task(**kwargs) -> None:
     """
     Function used for testing, returns nothing.

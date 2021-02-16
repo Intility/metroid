@@ -11,3 +11,4 @@ class MetroConfig(AppConfig):
         from metro.config import settings
 
         settings.validate()
+        settings.validate_import_strings()

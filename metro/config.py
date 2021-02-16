@@ -5,6 +5,9 @@ from django.core.exceptions import ImproperlyConfigured
 
 from metro.typing import Subscription, Subscriptions
 from django.utils.module_loading import import_string
+import logging
+
+logger = logging.getLogger('metro')
 
 
 class Settings:
@@ -82,6 +85,37 @@ class Settings:
                         return import_string(handler.get('handler_function'))
         return None
 
+    def validate_import_strings(self) -> None:
+        """
+        Validates the handler_function string for handlers specified in the settings.
+        """
+        for subscription in self.subscriptions:
+            topic_name = subscription.get('topic_name')
+            handlers = subscription.get('handlers', [])
+            for handler in handlers:
+                handler_function = handler['handler_function']
+                if not isinstance(handler_function, str):
+                    raise ImproperlyConfigured(
+                        f'Handler function:{handler_function}' f'for {topic_name} must be a string'
+                    )
+
+                try:
+                    import_string(handler_function)
+                except ModuleNotFoundError:
+                    raise ImproperlyConfigured(
+                        f'Handler function:{handler_function}' f' for {topic_name} cannot find module'
+                    )
+                except ImportError as error:
+                    if f"{handler_function} doesn't look like a module path" in str(error):
+                        raise ImproperlyConfigured(
+                            f'Handler function:{handler_function}' f' for {topic_name} is not a dotted function path'
+                        )
+                    else:
+                        raise ImproperlyConfigured(
+                            f'Handler function:{handler_function}'
+                            f' for {topic_name} cannot be imported. Verify that the dotted path points to a function'
+                        )
+
     def validate(self) -> None:
         """
         Validates all settings
@@ -112,12 +146,6 @@ class Settings:
                 subject = handler['subject']
                 if not isinstance(subject, str):
                     raise ImproperlyConfigured(f'Handler subject {subject} for {topic_name} must be a string')
-                handler_function = handler['handler_function']
-
-                if not isinstance(handler_function, str):
-                    raise ImproperlyConfigured(
-                        f'Handler function:{handler_function} for {topic_name} must be a string and a valid dotted path'
-                    )
 
 
 settings = Settings()
