@@ -85,7 +85,7 @@ class Settings:
                         return import_string(handler.get('handler_function'))
         return None
 
-    def validate_import_strings(self) -> None:
+    def _validate_import_strings(self) -> None:
         """
         Validates the handler_function string for handlers specified in the settings.
         """
@@ -146,6 +146,7 @@ class Settings:
                 subject = handler['subject']
                 if not isinstance(subject, str):
                     raise ImproperlyConfigured(f'Handler subject {subject} for {topic_name} must be a string')
+        self._validate_import_strings()
 
 
 settings = Settings()

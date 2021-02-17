@@ -248,7 +248,7 @@ def test_handler_function_is_not_str_exception():
     ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
-            invalid_settings.validate_import_strings()
+            invalid_settings._validate_import_strings()
 
         assert str(e.value) == f'Handler function:{handler_function}' f'for {topic_name} must be a string'
 
@@ -274,7 +274,7 @@ def test_handler_function_is_not_dotted_path_exception():
     ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
-            invalid_settings.validate_import_strings()
+            invalid_settings._validate_import_strings()
 
         assert str(e.value) == f'Handler function:{handler_function}' f' for {topic_name} is not a dotted function path'
 
@@ -300,7 +300,7 @@ def test_handler_function_module_not_found_exception():
     ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
-            invalid_settings.validate_import_strings()
+            invalid_settings._validate_import_strings()
 
         assert str(e.value) == f'Handler function:{handler_function}' f' for {topic_name} cannot find module'
 
@@ -326,7 +326,7 @@ def test_handler_function_method_not_found_exception():
     ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
-            invalid_settings.validate_import_strings()
+            invalid_settings._validate_import_strings()
 
         assert (
             str(e.value) == f'Handler function:{handler_function}'
@@ -349,7 +349,7 @@ def test_no_exception_is_thrown():
                         'handlers': [
                             {
                                 'subject': 'Test/Django/Module',
-                                'handler_function': 'tests.functional.test_celery.a_random_task',
+                                'handler_function': 'demoproj.tasks.a_random_task',
                             },
                         ],
                     }

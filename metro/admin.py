@@ -34,7 +34,6 @@ class FailedMessageAdmin(admin.ModelAdmin):
             )
             if handler:
                 try:
-
                     logger.info('Attempting to retry id %s', message.id)
                     handler.apply_async(  # type: ignore
                         kwargs={
