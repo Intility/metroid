@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 
 from metro.config import settings
 from metro.subscribe import subscribe_to_topic
+import time
 
 logger = logging.getLogger('metro')
 
@@ -22,6 +23,11 @@ class Command(BaseCommand):
         """
         Creates background tasks to subscribe to events
         """
+        if not settings.subscriptions:  # pragma: no cover
+            logger.info('No subscriptions found. Sleeping forever to avoid crash loops.')
+            while True:
+                time.sleep(60 * 10)  # Keeps CPU usage to a minimum
+
         tasks: list[Task] = [
             asyncio.create_task(
                 subscribe_to_topic(
@@ -45,15 +51,13 @@ class Command(BaseCommand):
                 logger.exception('Exception in subscription task %s. Exception: %s', task, error)
 
         for task in pending:
-            # cancel all remaining running tasks. This kills the service (and container)
+            # Cancel all remaining running tasks. This kills the service (and container)
             logger.info('Cancelling pending task %s', task)
             task.cancel()
 
     def handle(self, *args: None, **options) -> None:
         """
-        This function is called when `manage.py runmetro` is run from the terminal.
-
-        Spawns a process to handle incoming messages from a Metro subscription for each subscription configured in "***REMOVED***".
+        This function is called when `manage.py metro` is run from the terminal.
         """
         logger.info('Starting Metro subscriptions')
         asyncio.run(self.start_tasks())
