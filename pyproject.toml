@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "metro"
+name = "metroid"
 version = "1.0.0"  # Remember to change in __init__.py as well
-description = "Metro for Django"
+description = "Metroid - Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
 
 [tool.poetry.dependencies]
@@ -35,7 +35,7 @@ exclude = '''
 
 [tool.isort]
 profile = "black"
-src_paths = ["django_guid"]
+src_paths = ["metroid"]
 combine_as_imports = true
 line_length = 120
 sections = [
@@ -53,9 +53,6 @@ DJANGO_SETTINGS_MODULE = 'demoproj.settings'
 log_cli_format = '%(levelname)s %(asctime)s [%(correlation_id)s] %(name)s %(message)s'
 log_cli = true
 log_cli_level = 'DEBUG'
-
-[tool.coverage.report]
-omit = ['metro/apps.py']
 
 
 [build-system]

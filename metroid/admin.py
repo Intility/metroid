@@ -1,11 +1,11 @@
 from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from metro.models import FailedMessage
-from metro.config import settings
+from metroid.models import FailedMessage
+from metroid.config import settings
 import logging
 
-logger = logging.getLogger('metro')
+logger = logging.getLogger('metroid')
 
 
 @admin.register(FailedMessage)

@@ -11,6 +11,6 @@ if os.name == 'nt':
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'demoproj.settings')
 
-app = Celery('metro')
+app = Celery('metroid')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()

@@ -3,7 +3,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test import override_settings
 
 import pytest
-from metro.config import Settings, settings
+
+from metroid.config import Settings, settings
 
 
 def test_metro_is_not_in_settings_exception():
@@ -12,10 +13,10 @@ def test_metro_is_not_in_settings_exception():
     """
 
     with pytest.raises(ImproperlyConfigured) as e:
-        delattr(django_settings, 'METRO')
+        delattr(django_settings, 'METROID')
         Settings()
 
-    assert str(e.value) == '`METRO` settings must be defined in settings.py'
+    assert str(e.value) == '`METROID` settings must be defined in settings.py'
 
 
 def test_get_subscription_string_returns_none():
@@ -26,7 +27,7 @@ def test_get_subscription_string_returns_none():
     topic_name = 'test'
     subscription_name = 'coolest/sub/ever'
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -53,7 +54,7 @@ def test_get_subscription_string_returns_correct_connection_string():
     subscription_name = 'coolest/sub/ever'
     connection_string = 'Endpoint=sb://cool'
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -81,7 +82,7 @@ def test_subscriptions_is_not_list_exception():
     """
     Provides subscriptions as a string instead of a list, and checks if the correct exception is thrown.
     """
-    with override_settings(METRO={'subscriptions': 'i am string'}):
+    with override_settings(METROID={'subscriptions': 'i am string'}):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
             invalid_settings.validate()
@@ -94,11 +95,10 @@ def test_topic_name_is_not_str_exception():
     Provides topic_name as an integer instead of a string, and checks if the correct exception is thrown.
     """
     topic_name_value = 123
-    with override_settings(METRO={'subscriptions': [{'topic_name': topic_name_value}]}):
+    with override_settings(METROID={'subscriptions': [{'topic_name': topic_name_value}]}):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
             invalid_settings.validate()
-
         assert str(e.value) == f'Topic name {topic_name_value} must be a string'
 
 
@@ -107,7 +107,7 @@ def test_subscription_name_is_not_str_exception():
     Provides subscription_name  as None instead of a string, and checks if the correct exception is thrown.
     """
     subscription_name = None
-    with override_settings(METRO={'subscriptions': [{'topic_name': 'test', 'subscription_name': subscription_name}]}):
+    with override_settings(METROID={'subscriptions': [{'topic_name': 'test', 'subscription_name': subscription_name}]}):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
             invalid_settings.validate()
@@ -121,7 +121,7 @@ def test_connection_string_is_not_str_exception():
     """
     connection_string = bool
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {'topic_name': 'test', 'subscription_name': 'coolest/sub/ever', 'connection_string': connection_string}
             ]
@@ -140,7 +140,7 @@ def test_connection_string_does_not_start_with_endpoint():
     """
     connection_string = 'Where is my endpoint!?'
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {'topic_name': 'test', 'subscription_name': 'coolest/sub/ever', 'connection_string': connection_string}
             ]
@@ -159,7 +159,7 @@ def test_handlers_is_not_list_exception():
     """
     handlers = {}
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': 'test',
@@ -184,7 +184,7 @@ def test_handler_in_handlers_is_not_dict_exception():
     handler = 'subject'
     handlers = [handler]
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': 'test',
@@ -209,7 +209,7 @@ def test_subject_is_not_str_exception():
     topic_name = 'test'
     subject = 123
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -235,7 +235,7 @@ def test_handler_function_is_not_str_exception():
     subject = 'test/banonza'
     handler_function = None
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -249,8 +249,7 @@ def test_handler_function_is_not_str_exception():
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
             invalid_settings._validate_import_strings()
-
-        assert str(e.value) == f'Handler function:{handler_function}' f'for {topic_name} must be a string'
+        assert str(e.value) == f'Handler function:{handler_function} for {topic_name} must be a string'
 
 
 def test_handler_function_is_not_dotted_path_exception():
@@ -261,7 +260,7 @@ def test_handler_function_is_not_dotted_path_exception():
     subject = 'test/banonza'
     handler_function = 'testtesttest'
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -276,7 +275,7 @@ def test_handler_function_is_not_dotted_path_exception():
             invalid_settings = Settings()
             invalid_settings._validate_import_strings()
 
-        assert str(e.value) == f'Handler function:{handler_function}' f' for {topic_name} is not a dotted function path'
+        assert str(e.value) == f'Handler function:{handler_function} for {topic_name} is not a dotted function path'
 
 
 def test_handler_function_module_not_found_exception():
@@ -287,7 +286,7 @@ def test_handler_function_module_not_found_exception():
     subject = 'test/banonza'
     handler_function = 'test.test.test'
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -302,7 +301,7 @@ def test_handler_function_module_not_found_exception():
             invalid_settings = Settings()
             invalid_settings._validate_import_strings()
 
-        assert str(e.value) == f'Handler function:{handler_function}' f' for {topic_name} cannot find module'
+        assert str(e.value) == f'Handler function:{handler_function} for {topic_name} cannot find module'
 
 
 def test_handler_function_method_not_found_exception():
@@ -313,7 +312,7 @@ def test_handler_function_method_not_found_exception():
     subject = 'test/banonza'
     handler_function = 'demoproj.tasks.notfound'
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': topic_name,
@@ -340,7 +339,7 @@ def test_no_exception_is_thrown():
     """
     try:
         with override_settings(
-            METRO={
+            METROID={
                 'subscriptions': [
                     {
                         'topic_name': 'test',

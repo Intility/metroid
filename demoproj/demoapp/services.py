@@ -6,12 +6,12 @@ from decouple import config
 from django.utils import timezone
 
 from demoproj.celery import app
-from metro.celery import MetroTask
+from metroid.celery import MetroidTask
 
 logger = logging.getLogger(__name__)
 
 
-@app.task(base=MetroTask)
+@app.task(base=MetroidTask)
 def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
     """
     Demo task
@@ -38,7 +38,7 @@ def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: 
     return
 
 
-@app.task(base=MetroTask)
+@app.task(base=MetroidTask)
 def my_broken_task(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
     """
     Broken demo task

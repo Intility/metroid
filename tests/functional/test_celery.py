@@ -4,7 +4,8 @@ from django.test import override_settings
 from django.utils.module_loading import import_string
 
 import pytest
-from metro.models import FailedMessage
+
+from metroid.models import FailedMessage
 
 
 @pytest.mark.django_db

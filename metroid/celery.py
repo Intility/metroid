@@ -6,10 +6,10 @@ import logging
 from django_guid import get_guid
 
 
-logger = logging.getLogger('metro')
+logger = logging.getLogger('metroid')
 
 
-class MetroTask(Task):
+class MetroidTask(Task):
     def on_failure(
         self, exc: Exception, task_id: str, args: tuple, kwargs: dict[str, Any], einfo: ExceptionInfo
     ) -> None:
@@ -31,7 +31,7 @@ class MetroTask(Task):
         correlation_id = get_guid()
         logger.critical('Metro task exception. Message: %s, exception: %s, traceback: %s', message, str(exc), einfo)
         try:
-            from metro.models import FailedMessage
+            from metroid.models import FailedMessage
 
             FailedMessage.objects.create(
                 topic_name=topic_name,

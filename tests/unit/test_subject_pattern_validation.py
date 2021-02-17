@@ -1,7 +1,8 @@
 from django.core.exceptions import ImproperlyConfigured
 
 import pytest
-from metro.subscribe import match_handler_subject
+
+from metroid.subscribe import match_handler_subject
 
 
 def test_valid_pattern() -> None:
