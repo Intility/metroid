@@ -2,7 +2,8 @@ from django.test import override_settings
 
 import pytest
 from azure.servicebus import TransportType
-from metro.subscribe import subscribe_to_topic
+
+from metroid.subscribe import subscribe_to_topic
 
 
 @pytest.mark.asyncio

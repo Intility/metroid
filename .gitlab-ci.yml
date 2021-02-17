@@ -12,7 +12,7 @@ test:
       git
     - pip install poetry
     - poetry install
-    - poetry run pytest --cov=metro tests/* --cov-report=xml
+    - poetry run pytest --cov=metroid tests/* --cov-report=xml
     - poetry run coverage report
   only:
     - merge_requests

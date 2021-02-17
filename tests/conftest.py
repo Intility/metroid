@@ -1,24 +1,25 @@
 from django.test import override_settings
 
 import pytest
-from metro.config import Settings
 from tests.mock_service_bus import service_mock, service_mock_error
+
+from metroid.config import Settings
 
 
 @pytest.fixture
 def mock_service_bus_client_ok(mocker):
-    return mocker.patch('metro.subscribe.ServiceBusClient', service_mock)
+    return mocker.patch('metroid.subscribe.ServiceBusClient', service_mock)
 
 
 @pytest.fixture
 def mock_service_bus_client_failure(mocker):
-    return mocker.patch('metro.subscribe.ServiceBusClient', service_mock_error)
+    return mocker.patch('metroid.subscribe.ServiceBusClient', service_mock_error)
 
 
 @pytest.fixture(autouse=True)
 def mock_subscriptions(monkeypatch):
     with override_settings(
-        METRO={
+        METROID={
             'subscriptions': [
                 {
                     'topic_name': 'test',
@@ -47,4 +48,4 @@ def mock_subscriptions(monkeypatch):
         }
     ):
         settings = Settings()
-        monkeypatch.setattr('metro.management.commands.metro.settings', settings)
+        monkeypatch.setattr('metroid.management.commands.metroid.settings', settings)

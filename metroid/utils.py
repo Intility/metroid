@@ -2,7 +2,7 @@ import re
 import logging
 from django.core.exceptions import ImproperlyConfigured
 
-logger = logging.getLogger('metro')
+logger = logging.getLogger('metroid')
 
 
 def match_handler_subject(

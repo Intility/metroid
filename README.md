@@ -38,13 +38,13 @@
 </p>
 
 
-# Metro for Django
+# Metroid - Metro for Django
 
 This app is intended to streamline integration with Metro for all Django+Celery users by:
 
 * Asynchronous handling of subscriptions and messages with one command
 * Execute Celery tasks based on message topics, defined in `settings.py`
-* Retry failed tasks through your admin dashboard when using the `MetroTask` base
+* Retry failed tasks through your admin dashboard when using the `MetroidTask` base
 
 ## Overview
 * `python` >= 3.9 - We're using the newest versions of type annotations
@@ -55,7 +55,7 @@ This app is intended to streamline integration with Metro for all Django+Celery 
 
 ### Implementation
 
-The `python manage.py metro` app is fully asynchronous, and has no blocking code. It utilizes `Celery` to execute tasks.
+The `python manage.py metroid` app is fully asynchronous, and has no blocking code. It utilizes `Celery` to execute tasks.
 
 It works by:
 1. Going through all your configured subscriptions and start a new async connection for each one of them
@@ -74,10 +74,10 @@ It works by:
 > **_Note_**
 > For a complete example, have a look in `demoproj/settings.py`.
 
-1. Create a `METRO` key in `settings.py` with all your subscriptions and handlers.
+1. Create a `METROID` key in `settings.py` with all your subscriptions and handlers.
 Example settings:
 ```python
-METRO = {
+METROID = {
     'subscriptions': [
         {
             'topic_name': 'metro-demo',
@@ -153,7 +153,7 @@ celery -A demoproj worker -l info
 ```
 5. Run the subscriber:
 ```python
-python manage.py metro
+python manage.py metroid
 ```
 6. Send messages to Metro. Example code can be found in [`demoproj/demoapp/services.py`](demoproj/demoapp/services.py)
 7. Run the webserver:

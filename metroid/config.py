@@ -1,31 +1,25 @@
-from typing import Optional, Union, Callable
+import logging
+from typing import Callable, Optional, Union
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
-
-from metro.typing import Subscription, Subscriptions
 from django.utils.module_loading import import_string
-import logging
 
-logger = logging.getLogger('metro')
+from metroid.typing import Subscription, Subscriptions
+
+logger = logging.getLogger('metroid')
 
 
 class Settings:
     """
     Subscriptions should be in this format:
-    TODO: Implement connection string generator as Thomas ***REMOVED*** did
-     Insp: ***REMOVED***
 
-    As confirmed in Metro on slack, there will be 1 key per topic. This has been a deciding factor in
-    how settings are implemented.
-    ***REMOVED***
-
-    METRO = {
+    METROID = {
         'subscriptions': {
             [
                 {
-                    'topic_name': '***REMOVED***',
-                    'subscription_name': 'sub-***REMOVED***--helloworld',
+                    'topic_name': 'test',
+                    'subscription_name': 'sub-test-helloworld',
                     'connection_string': 'Endpoint=sb://...',
                     'handlers': [
                         {
@@ -45,11 +39,10 @@ class Settings:
     """
 
     def __init__(self) -> None:
-        if hasattr(django_settings, 'METRO'):
-            # self.settings: dict[str, list[dict[str, Union[str, list[dict[str, Callable]]]]]] = django_settings.METRO
-            self.settings: Subscriptions = django_settings.METRO
+        if hasattr(django_settings, 'METROID'):
+            self.settings: Subscriptions = django_settings.METROID
         else:
-            raise ImproperlyConfigured('`METRO` settings must be defined in settings.py')
+            raise ImproperlyConfigured('`METROID` settings must be defined in settings.py')
 
     @property
     def subscriptions(self) -> list[Subscription]:
@@ -95,25 +88,23 @@ class Settings:
             for handler in handlers:
                 handler_function = handler['handler_function']
                 if not isinstance(handler_function, str):
-                    raise ImproperlyConfigured(
-                        f'Handler function:{handler_function}' f'for {topic_name} must be a string'
-                    )
+                    raise ImproperlyConfigured(f'Handler function:{handler_function} for {topic_name} must be a string')
 
                 try:
                     import_string(handler_function)
                 except ModuleNotFoundError:
                     raise ImproperlyConfigured(
-                        f'Handler function:{handler_function}' f' for {topic_name} cannot find module'
+                        f'Handler function:{handler_function} for {topic_name} cannot find module'
                     )
                 except ImportError as error:
                     if f"{handler_function} doesn't look like a module path" in str(error):
                         raise ImproperlyConfigured(
-                            f'Handler function:{handler_function}' f' for {topic_name} is not a dotted function path'
+                            f'Handler function:{handler_function} for {topic_name} is not a dotted function path'
                         )
                     else:
                         raise ImproperlyConfigured(
-                            f'Handler function:{handler_function}'
-                            f' for {topic_name} cannot be imported. Verify that the dotted path points to a function'
+                            f'Handler function:{handler_function} '
+                            f'for {topic_name} cannot be imported. Verify that the dotted path points to a function'
                         )
 
     def validate(self) -> None:

@@ -5,11 +5,11 @@ from asgiref.sync import sync_to_async
 from azure.servicebus import ServiceBusReceivedMessage, TransportType
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
-from metro.typing import Handler
-from metro.utils import match_handler_subject
+from metroid.typing import Handler
+from metroid.utils import match_handler_subject
 from django.utils.module_loading import import_string
 
-logger = logging.getLogger('metro')
+logger = logging.getLogger('metroid')
 
 
 async def subscribe_to_topic(

@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
-from decouple import config
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'metro',
+    'metroid',
     'django_guid',
 ]
 
@@ -130,12 +128,12 @@ DJANGO_GUID = {
 }
 
 
-METRO = {
+METROID = {
     'subscriptions': [
         {
             'topic_name': 'test',
             'subscription_name': 'sub-test-djangomoduletest',
-            'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
+            'connection_string': 'Endpoint=sb://...',
             'handlers': [
                 {
                     'subject': 'Test/Django/Module',
@@ -169,7 +167,7 @@ LOGGING = {
     },
     'loggers': {
         'demoproj': {'handlers': ['default'], 'level': 'DEBUG'},
-        'metro': {
+        'metroid': {
             'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': True,

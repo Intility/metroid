@@ -4,11 +4,11 @@ from asyncio.tasks import Task
 
 from django.core.management.base import BaseCommand
 
-from metro.config import settings
-from metro.subscribe import subscribe_to_topic
+from metroid.config import settings
+from metroid.subscribe import subscribe_to_topic
 import time
 
-logger = logging.getLogger('metro')
+logger = logging.getLogger('metroid')
 
 
 class Command(BaseCommand):
@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: None, **options) -> None:
         """
-        This function is called when `manage.py metro` is run from the terminal.
+        This function is called when `manage.py metroid` is run from the terminal.
         """
         logger.info('Starting Metro subscriptions')
         asyncio.run(self.start_tasks())
