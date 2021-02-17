@@ -40,21 +40,17 @@
 
 # Metro for Django
 
-This app is intended to streamline integration with Metro for all Django users by:
+This app is intended to streamline integration with Metro for all Django+Celery users by:
 
 * Asynchronous handling of subscriptions and messages with one command
-* Sends all tasks to Celery workers, based on your `settings.py`
+* Execute Celery tasks based on message topics, defined in `settings.py`
 * Retry failed tasks through your admin dashboard when using the `MetroTask` base
 
 ## Overview
 * `python` >= 3.9 - We're using the newest versions of type annotations
-* `django` >= 3.1.1 - For `asgiref` and `django-guid` dependencies
-* `celery` >= 5.0.0 - Might work on previous versions, but not supported
-* `django-guid` >= 3.2.0 - Storing correlation IDs in the database, making debugging easy
-
-If you're not running Celery or have another use case you can find pure Python examples in both sync and async versions
-in the [Metro Python Samples](***REMOVED***)
-repository.
+* `django` >= 3.1.1 - For `asgiref`, settings
+* `celery` >= 5.0.0 - Execute tasks based on a subject
+* `django-guid` >= 3.2.0 - Storing correlation IDs for failed tasks in the database, making debugging easy
 
 
 ### Implementation
