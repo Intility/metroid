@@ -1,18 +1,42 @@
-[![Py](https://img.shields.io/badge/python-v3.9+-blue.svg)](https://python.org)
-[![Django](https://img.shields.io/badge/django-3.1.1+%20-blue.svg)](https://djangoproject.com)
-[![Celery](https://img.shields.io/badge/celery-5.0.0+%20-blue.svg)](https://docs.celeryproject.org/en/stable/)
-[![Azure-Service](https://img.shields.io/badge/azure--servicebus-7.0.1+%20-blue.svg)](https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/servicebus/azure-servicebus)
-[![Django-GUID](https://img.shields.io/badge/django--guid-3.2.0+-blue.svg)](https://github.com/snok/django-guid/)
+<p align="center"><h1 align='center'>Metroid</h1></p>
+<p align="center">
+    <em>Subscribe, act, publish.</em>
+</p>
+<p align="center">
+    <a href="https://python.org">
+        <img src="https://img.shields.io/badge/python-v3.9+-blue.svg" alt="Python version">
+    </a>
+    <a href="https://djangoproject.com">
+        <img src="https://img.shields.io/badge/django-3.1.1+%20-blue.svg" alt="Django version">
+    </a>
+    <a href="https://docs.celeryproject.org/en/stable/">
+        <img src="https://img.shields.io/badge/celery-5.0.0+%20-blue.svg" alt="Celery version">
+    </a>
+    <a href="https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/servicebus/azure-servicebus">
+        <img src="https://img.shields.io/badge/azure--servicebus-7.0.1+%20-blue.svg" alt="ServiceBus version">
+    </a>
+    <a href="https://github.com/snok/django-guid/">
+        <img src="https://img.shields.io/badge/django--guid-3.2.0+-blue.svg" alt="Django GUID version">
+    </a>
+</p>
+<p align="center">
+    <a href="https://codecov.io/gh/intility/metroid">
+        <img src="https://codecov.io/gh/intility/metroid/branch/master/graph/badge.svg" alt="Codecov">
+    </a>
+    <a href="https://github.com/pre-commit/pre-commit">
+        <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white" alt="Pre-commit">
+    </a>
+    <a href="https://github.com/psf/black">
+        <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Black">
+    </a>
+    <a href="http://mypy-lang.org">
+        <img src="http://www.mypy-lang.org/static/mypy_badge.svg" alt="mypy">
+    </a>
+    <a href="https://pycqa.github.io/isort/">
+        <img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336" alt="isort">
+    </a>
+</p>
 
-
-[![coverage report](***REMOVED***)](***REMOVED***) 
-[![pipeline status](***REMOVED***)](***REMOVED***)
-
-
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 # Metro for Django
 
@@ -57,28 +81,29 @@ It works by:
 1. Create a `METRO` key in `settings.py` with all your subscriptions and handlers.
 Example settings:
 ```python
-from demoproj.demoapp.services import my_func
 METRO = {
     'subscriptions': [
         {
             'topic_name': 'metro-demo',
             'subscription_name': 'sub-metrodemo-metrodemoerfett',
             'connection_string': config('CONNECTION_STRING_METRO_DEMO', None),
-            'handlers': [{'subject': 'MetroDemo/Type/GeekJokes','regex':False,'handler_function': 'demoproj.demoapp.services.my_func'}],
+            'handlers': [
+               {
+                  'subject': 'MetroDemo/Type/GeekJokes',
+                  'regex': False,
+                  'handler_function': 'demoproj.demoapp.services.my_func'
+                }
+            ],
         },
     ]
 }
-
 ```
 
-The `handler_function` is defined by providing the full dotted path as a string. For example,`from demoproj.demoapp.services import my_func` is provided as: `'demoproj.demoapp.services.my_func'`.
+The `handler_function` is defined by providing the full dotted path as a string. For example,`from demoproj.demoapp.services import my_func` is provided as `'demoproj.demoapp.services.my_func'`.
 
-
-
-The handlers subject can be a regular expression  or a string. If a regular expression is provided, the variable regex must be set to True, for example: 
+The handlers subject can be a regular expression or a string. If a regular expression is provided, the variable regex must be set to True. Example:
  ```python
-             'handlers': [{'subject': r'^MetroDemo/Type/.*$','regex':True,'handler_function': my_func}],
-
+'handlers': [{'subject': r'^MetroDemo/Type/.*$','regex':True,'handler_function': my_func}],
  ```
 
 
@@ -142,7 +167,3 @@ python manage.py runserver 8000
 8. See failed messages under `http://localhost:8080/admin`
 
 To contribute, please see [`CONTRIBUTING.md`](CONTRIBUTING.md)
-
-### TODO
-* Tests
-* Support regex patterns
