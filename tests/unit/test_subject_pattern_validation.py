@@ -8,10 +8,9 @@ from metroid.subscribe import match_handler_subject
 def test_valid_pattern() -> None:
     """
     Tests if a valid pattern matches  the provided subject.
-
     """
-    subject = r'^***REMOVED***.*$'
-    subject_in_message = '***REMOVED***'
+    subject = r'^something\/tests\/haha.*$'
+    subject_in_message = 'something/tests/haha/asd-123'
     is_match = match_handler_subject(subject=subject, message_subject=subject_in_message, is_regex=True)
     assert is_match is True
 
@@ -20,8 +19,8 @@ def test_wrong_subject_match_on_pattern() -> None:
     """
     Tests if the validation fails if not a matching reggex is provided.
     """
-    subject = r'^***REMOVED***.*$'
-    subject_in_message = '***REMOVED***'
+    subject = r'^something\/tests\/haha.*$'
+    subject_in_message = 'tests/haha/asd-123'
     is_match = match_handler_subject(subject=subject, message_subject=subject_in_message, is_regex=True)
     assert is_match is False
 
@@ -49,7 +48,6 @@ def test_bogus_string() -> None:
 def test_if_exception_is_thrown() -> None:
     """
     Tests if the correct exception is thrown upon providing an invalid regex.
-
     """
     with pytest.raises(ImproperlyConfigured) as e:
         subject = 'tests/invalid['
