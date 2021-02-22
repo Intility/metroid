@@ -18,6 +18,9 @@ def mock_service_bus_client_failure(mocker):
 
 @pytest.fixture(autouse=True)
 def mock_subscriptions(monkeypatch):
+    """
+    Default settings
+    """
     with override_settings(
         METROID={
             'subscriptions': [
@@ -44,8 +47,15 @@ def mock_subscriptions(monkeypatch):
                         },
                     ],
                 },
-            ]
+            ],
+            'publish_settings': [
+                {
+                    'topic_name': 'test123',
+                    'x_metro_key': 'my-metro-key',
+                }
+            ],
         }
     ):
         settings = Settings()
         monkeypatch.setattr('metroid.management.commands.metroid.settings', settings)
+        monkeypatch.setattr('metroid.publish.settings', settings)

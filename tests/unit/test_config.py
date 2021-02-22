@@ -19,63 +19,59 @@ def test_metro_is_not_in_settings_exception():
     assert str(e.value) == '`METROID` settings must be defined in settings.py'
 
 
-def test_get_subscription_string_returns_none():
+def test_get_x_metro_key_raises_correctly():
     """
-    Tests if the method get_subscription_string returns None, when no matching topic_name and subscription_name is
-    provided.
+    Tests if the method get_x_metro_key raises an exception when no key is found.
     """
-    topic_name = 'test'
-    subscription_name = 'coolest/sub/ever'
-    with override_settings(
-        METROID={
-            'subscriptions': [
-                {
-                    'topic_name': topic_name,
-                    'subscription_name': 'coolest/sub/ever',
-                    'connection_string': 'Endpoint=sb://cool',
-                    'handlers': [{'subject': 'test/banonza', 'handler_function': 'i am a function'}],
-                }
-            ]
-        }
-    ):
+    with override_settings(METROID={'subscriptions': [], 'publish_settings': []}):
         mock_settings = Settings()
-        get_subscription = mock_settings.get_subscription_string(
-            topic_name='test2', subscription_name=subscription_name
-        )
-        assert get_subscription is None
+        with pytest.raises(ImproperlyConfigured):
+            mock_settings.get_x_metro_key(
+                topic_name='test2',
+            )
 
 
-def test_get_subscription_string_returns_correct_connection_string():
+def test_publish_topic_name_settings_not_string():
     """
-    Tests if the method get_subscription_string returns the correct connection_string, when a matching topic_name
-    and subscription_name is provided.
+    Tests if the method get_x_metro_key raises an exception when no key is found.
     """
-    topic_name = 'test'
-    subscription_name = 'coolest/sub/ever'
-    connection_string = 'Endpoint=sb://cool'
+    with override_settings(METROID={'publish_settings': [{'topic_name': 123}]}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            mock_settings = Settings()
+            mock_settings.validate()
+        assert str(e.value) == 'Topic name must be a string'
+
+
+def test_publish_metro_key_settings_not_string():
+    """
+    Tests if the method get_x_metro_key raises an exception when no key is found.
+    """
+    with override_settings(METROID={'publish_settings': [{'topic_name': 'topicName', 'x_metro_key': 123}]}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            mock_settings = Settings()
+            mock_settings.validate()
+        assert str(e.value) == 'x_metro_key must be a string'
+
+
+def test_get_x_metro_key_returns_when_found():
     with override_settings(
-        METROID={
-            'subscriptions': [
-                {
-                    'topic_name': topic_name,
-                    'subscription_name': 'coolest/sub/ever',
-                    'connection_string': connection_string,
-                    'handlers': [{'subject': 'test/banonza', 'handler_function': 'i am a function'}],
-                },
-                {
-                    'topic_name': 'test2',
-                    'subscription_name': 'coolest/sub/ever',
-                    'connection_string': 'Endpoint=sb://notsocool',
-                    'handlers': [{'subject': 'test/banonza', 'handler_function': 'i am a function'}],
-                },
-            ]
-        }
+        METROID={'subscriptions': [], 'publish_settings': [{'topic_name': 'test2', 'x_metro_key': 'asdf'}]}
     ):
         mock_settings = Settings()
-        get_subscription = mock_settings.get_subscription_string(
-            topic_name=topic_name, subscription_name=subscription_name
-        )
-        assert get_subscription is connection_string
+        metro_key = mock_settings.get_x_metro_key(topic_name='test2')
+        assert metro_key == 'asdf'
+
+
+def test_publish_settings_is_not_list_exception():
+    """
+    Provides subscriptions as a string instead of a list, and checks if the correct exception is thrown.
+    """
+    with override_settings(METROID={'publish_settings': 'i am string'}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate()
+
+        assert str(e.value) == 'Publish settings must be a list'
 
 
 def test_subscriptions_is_not_list_exception():
@@ -95,7 +91,18 @@ def test_topic_name_is_not_str_exception():
     Provides topic_name as an integer instead of a string, and checks if the correct exception is thrown.
     """
     topic_name_value = 123
-    with override_settings(METROID={'subscriptions': [{'topic_name': topic_name_value}]}):
+    with override_settings(
+        METROID={
+            'subscriptions': [
+                {
+                    'topic_name': topic_name_value,
+                    'subscription_name': 'hello',
+                    'handlers': [],
+                    'connection_string': 'Endpoint=sb://...',
+                }
+            ]
+        }
+    ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
             invalid_settings.validate()
@@ -107,7 +114,18 @@ def test_subscription_name_is_not_str_exception():
     Provides subscription_name  as None instead of a string, and checks if the correct exception is thrown.
     """
     subscription_name = None
-    with override_settings(METROID={'subscriptions': [{'topic_name': 'test', 'subscription_name': subscription_name}]}):
+    with override_settings(
+        METROID={
+            'subscriptions': [
+                {
+                    'topic_name': 'test',
+                    'subscription_name': subscription_name,
+                    'handlers': [],
+                    'connection_string': 'Endpoint=sb://...',
+                }
+            ]
+        }
+    ):
         with pytest.raises(ImproperlyConfigured) as e:
             invalid_settings = Settings()
             invalid_settings.validate()
@@ -123,7 +141,12 @@ def test_connection_string_is_not_str_exception():
     with override_settings(
         METROID={
             'subscriptions': [
-                {'topic_name': 'test', 'subscription_name': 'coolest/sub/ever', 'connection_string': connection_string}
+                {
+                    'topic_name': 'test',
+                    'subscription_name': 'coolest/sub/ever',
+                    'connection_string': connection_string,
+                    'handlers': [],
+                }
             ]
         }
     ):
@@ -142,7 +165,12 @@ def test_connection_string_does_not_start_with_endpoint():
     with override_settings(
         METROID={
             'subscriptions': [
-                {'topic_name': 'test', 'subscription_name': 'coolest/sub/ever', 'connection_string': connection_string}
+                {
+                    'topic_name': 'test',
+                    'subscription_name': 'coolest/sub/ever',
+                    'connection_string': connection_string,
+                    'handlers': [],
+                }
             ]
         }
     ):

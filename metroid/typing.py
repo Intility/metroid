@@ -14,5 +14,11 @@ class Subscription(TypedDict):
     handlers: list[Handler]
 
 
-class Subscriptions(TypedDict):
+class TopicPublishSettings(TypedDict):
+    topic_name: str
+    x_metro_key: str
+
+
+class MetroidSettings(TypedDict):
     subscriptions: list[Subscription]
+    publish_settings: list[TopicPublishSettings]
