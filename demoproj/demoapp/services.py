@@ -6,7 +6,7 @@ from decouple import config
 from django.utils import timezone
 
 from demoproj.celery import app
-from metroid.celery import MetroidTask
+from metroid import MetroidTask
 
 logger = logging.getLogger(__name__)
 

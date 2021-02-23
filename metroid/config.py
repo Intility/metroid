@@ -5,7 +5,7 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
 
-from metroid.typing import Subscription, Subscriptions
+from metroid.typing import Subscription, MetroidSettings, TopicPublishSettings
 
 logger = logging.getLogger('metroid')
 
@@ -15,32 +15,41 @@ class Settings:
     Subscriptions should be in this format:
 
     METROID = {
-        'subscriptions': {
-            [
-                {
-                    'topic_name': 'test',
-                    'subscription_name': 'sub-test-helloworld',
-                    'connection_string': 'Endpoint=sb://...',
-                    'handlers': [
-                        {
-                            'subject': '^MetroDemo/Type/.*',
-                            'regex': True,
-                            'handler_function': function_to_call,
-                        },
-                        {
-                            'subject': 'MetroDemo/Type/DadJokes.Created',
-                            'regex': False,
-                            'handler_function': another_func_to_call
-                        }
-                    ]
-                },
-            ]
+        'subscriptions': [
+            {
+                'topic_name': 'test',
+                'subscription_name': 'sub-test-helloworld',
+                'connection_string': 'Endpoint=sb://...',
+                'handlers': [
+                    {
+                        'subject': '^MetroDemo/Type/.*',
+                        'regex': True,
+                        'handler_function': function_to_call,
+                    },
+                    {
+                        'subject': 'MetroDemo/Type/DadJokes.Created',
+                        'regex': False,
+                        'handler_function': another_func_to_call
+                    }
+                ],
+            },
+        ],
+        'publish_settings': [
+            {
+                'topic_name': 'test',
+                'x_metro_key': 'my-metro-key',
+            },
+            {
+                'topic_name': 'another_topic',
+                'x_metro_key': 'my-other-metro-key',
+            },
+        ]
     }
     """
 
     def __init__(self) -> None:
         if hasattr(django_settings, 'METROID'):
-            self.settings: Subscriptions = django_settings.METROID
+            self.settings: MetroidSettings = django_settings.METROID
         else:
             raise ImproperlyConfigured('`METROID` settings must be defined in settings.py')
 
@@ -49,19 +58,24 @@ class Settings:
         """
         Returns all subscriptions
         """
-        return self.settings['subscriptions']
+        return self.settings.get('subscriptions', [])
 
-    def get_subscription_string(self, *, topic_name: str, subscription_name: str) -> Union[str, None]:
+    @property
+    def publish_settings(self) -> list[TopicPublishSettings]:
         """
-        Fetches the subscription string based on topic and subscription name
+        Returns all publish to metro settings
         """
-        for subscription in self.subscriptions:
-            if (
-                subscription.get('topic_name') == topic_name
-                and subscription.get('subscription_name') == subscription_name
-            ):
-                return subscription['connection_string']
-        return None
+        return self.settings.get('publish_settings', [])
+
+    def get_x_metro_key(self, *, topic_name: str) -> Union[str, None]:
+        """
+        Fetches the x-metro-key based on topic
+        """
+        for topic in self.publish_settings:
+            if topic['topic_name'] == topic_name:
+                return topic['x_metro_key']
+        logger.critical('Unable to find a x-metro-key for %s', topic_name)
+        raise ImproperlyConfigured(f'No x-metro-key found for {topic_name}')
 
     def get_handler_function(self, *, topic_name: str, subscription_name: str, subject: str) -> Optional[Callable]:
         """
@@ -113,11 +127,13 @@ class Settings:
         """
         if not isinstance(self.subscriptions, list):
             raise ImproperlyConfigured('Subscriptions must be a list')
+        if not isinstance(self.publish_settings, list):
+            raise ImproperlyConfigured('Publish settings must be a list')
         for subscription in self.subscriptions:
-            topic_name = subscription.get('topic_name', None)
-            subscription_name = subscription.get('subscription_name', None)
-            connection_string = subscription.get('connection_string', None)
-            handlers = subscription.get('handlers', None)
+            topic_name = subscription['topic_name']
+            subscription_name = subscription['subscription_name']
+            connection_string = subscription['connection_string']
+            handlers = subscription['handlers']
             if not isinstance(topic_name, str):
                 raise ImproperlyConfigured(f'Topic name {topic_name} must be a string')
             if not isinstance(subscription_name, str):
@@ -133,10 +149,15 @@ class Settings:
             for handler in handlers:
                 if not isinstance(handler, dict):
                     raise ImproperlyConfigured(f'{handlers} must contain dict values, got: {handler}')
-
                 subject = handler['subject']
                 if not isinstance(subject, str):
                     raise ImproperlyConfigured(f'Handler subject {subject} for {topic_name} must be a string')
+
+        for topic in self.publish_settings:
+            if not isinstance(topic['topic_name'], str):
+                raise ImproperlyConfigured('Topic name must be a string')
+            if not isinstance(topic['x_metro_key'], str):
+                raise ImproperlyConfigured('x_metro_key must be a string')
         self._validate_import_strings()
 
 
