@@ -1,18 +1,20 @@
-Contributing to Django Metro
-============================
+Contributing to Metroid
+=======================
 
-This package is open to contributions. To contribute, please follow these steps:
+1. Create an issue explaining the bug you'd like to fix/the feature you'd like to implement
 
-1. Fork the upstream repository into a personal account.
+2. Get it approved
 
-2. Install poetry running ``pip install poetry`` or ``curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -``
+3. Fork the upstream repository into a personal account
 
-3. Install dependencies by running ``poetry install``
+4. Install poetry running ``pip install poetry`` or ``curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -``
 
-4. Install pre-commit (for linting) by running ``pre-commit install``
+5. Install dependencies by running ``poetry install``
 
-5. Create a new branch for you changes
+6. Install pre-commit (for linting) by running ``pre-commit install``
 
-6. Push the topic branch to your personal fork
+7. Create a new branch for you changes
 
-7. Create a pull request to the main repository with a detailed explanation of why you propose the changes should be made
+8. Push the topic branch to your personal fork
+
+9. Create a pull request to the main repository
