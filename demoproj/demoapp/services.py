@@ -1,11 +1,12 @@
 import json
 import logging
 
-import requests
-from decouple import config
 from django.utils import timezone
 
+import requests
+from decouple import config
 from demoproj.celery import app
+
 from metroid import MetroidTask
 
 logger = logging.getLogger(__name__)

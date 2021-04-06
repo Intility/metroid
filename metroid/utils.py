@@ -1,5 +1,6 @@
-import re
 import logging
+import re
+
 from django.core.exceptions import ImproperlyConfigured
 
 logger = logging.getLogger('metroid')

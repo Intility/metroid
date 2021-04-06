@@ -1,10 +1,10 @@
+import logging
 from typing import Any
 
 from billiard.einfo import ExceptionInfo
-from celery import Task
-import logging
 from django_guid import get_guid
 
+from celery import Task
 
 logger = logging.getLogger('metroid')
 
