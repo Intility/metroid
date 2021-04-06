@@ -1,9 +1,11 @@
+import logging
+
 from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from metroid.models import FailedMessage
+
 from metroid.config import settings
-import logging
+from metroid.models import FailedMessage
 
 logger = logging.getLogger('metroid')
 

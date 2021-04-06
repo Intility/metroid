@@ -1,12 +1,12 @@
 import asyncio
 import logging
+import time
 from asyncio.tasks import Task
 
 from django.core.management.base import BaseCommand
 
 from metroid.config import settings
 from metroid.subscribe import subscribe_to_topic
-import time
 
 logger = logging.getLogger('metroid')
 

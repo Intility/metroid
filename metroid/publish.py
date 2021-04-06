@@ -1,9 +1,12 @@
-from typing import Optional, Union
-from django.utils import timezone
-from metroid.config import settings
-import requests
 import json
 import logging
+from typing import Optional, Union
+
+from django.utils import timezone
+
+import requests
+
+from metroid.config import settings
 
 logger = logging.getLogger('metroid')
 

@@ -1,4 +1,5 @@
 from demoproj.celery import app
+
 from metroid.celery import MetroidTask
 
 
