@@ -21,7 +21,7 @@
 </p>
 <p align="center">
     <a href="https://codecov.io/gh/intility/metroid">
-        <img src="https://codecov.io/gh/intility/metroid/branch/master/graph/badge.svg" alt="Codecov">
+        <img src="https://codecov.io/gh/intility/metroid/branch/main/graph/badge.svg" alt="Codecov">
     </a>
     <a href="https://github.com/pre-commit/pre-commit">
         <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white" alt="Pre-commit">
