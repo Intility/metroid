@@ -22,3 +22,4 @@ class TopicPublishSettings(TypedDict):
 class MetroidSettings(TypedDict):
     subscriptions: list[Subscription]
     publish_settings: list[TopicPublishSettings]
+    worker_type: str

@@ -43,7 +43,8 @@ class Settings:
                 'topic_name': 'another_topic',
                 'x_metro_key': 'my-other-metro-key',
             },
-        ]
+        ],
+        'worker_type': 'celery' # default
     }
     """
 
@@ -66,6 +67,13 @@ class Settings:
         Returns all publish to metro settings
         """
         return self.settings.get('publish_settings', [])
+
+    @property
+    def worker_type(self) -> str:
+        """
+        Returns the worker type.
+        """
+        return self.settings.get('worker_type', 'celery')
 
     def get_x_metro_key(self, *, topic_name: str) -> Union[str, None]:
         """
@@ -125,6 +133,8 @@ class Settings:
         """
         Validates all settings
         """
+        if self.worker_type not in ['celery', 'rq']:
+            raise ImproperlyConfigured("Worker type must be 'celery' or 'rq'")
         if not isinstance(self.subscriptions, list):
             raise ImproperlyConfigured('Subscriptions must be a list')
         if not isinstance(self.publish_settings, list):

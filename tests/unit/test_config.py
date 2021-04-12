@@ -4,7 +4,7 @@ from django.test import override_settings
 
 import pytest
 
-from metroid.config import Settings, settings
+from metroid.config import Settings
 
 
 def test_metro_is_not_in_settings_exception():
@@ -84,6 +84,18 @@ def test_subscriptions_is_not_list_exception():
             invalid_settings.validate()
 
         assert str(e.value) == 'Subscriptions must be a list'
+
+
+def test_worker_type_is_not_valid():
+    """
+    Provides worker type an invalid string, and checks if the correct exception is thrown.
+    """
+    with override_settings(METROID={'worker_type': 'coolio'}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate()
+
+        assert str(e.value) == "Worker type must be 'celery' or 'rq'"
 
 
 def test_topic_name_is_not_str_exception():
@@ -380,8 +392,9 @@ def test_no_exception_is_thrown():
                             },
                         ],
                     }
-                ]
-            }
+                ],
+                'worker_type': 'rq',
+            },
         ):
             mock_settings = Settings()
             mock_settings.validate()

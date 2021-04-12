@@ -1,5 +1,6 @@
 import logging
 
+import django_rq
 from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -37,14 +38,20 @@ class FailedMessageAdmin(admin.ModelAdmin):
             if handler:
                 try:
                     logger.info('Attempting to retry id %s', message.id)
-                    handler.apply_async(  # type: ignore
-                        kwargs={
-                            'message': message.message,
-                            'topic_name': message.topic_name,
-                            'subscription_name': message.subscription_name,
-                            'subject': message.subject,
-                        }
-                    )
+
+                    if settings.worker_type == 'celery':
+                        handler.apply_async(  # type: ignore
+                            kwargs={
+                                'message': message.message,
+                                'topic_name': message.topic_name,
+                                'subscription_name': message.subscription_name,
+                                'subject': message.subject,
+                            }
+                        )
+                    elif settings.worker_type == 'rq':
+                        failed_job_registry = django_rq.get_queue('metroid').failed_job_registry
+                        failed_job_registry.requeue(message.message.get('id'))
+
                     logger.info('Deleting %s from database', message.id)
                     message.delete()
                     logger.info('Returning')

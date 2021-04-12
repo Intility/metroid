@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
@@ -29,7 +30,8 @@ def mock_subscriptions_admin(monkeypatch):
                         {'subject': 'ErrorTask', 'handler_function': 'demoproj.tasks.error_task'},
                     ],
                 },
-            ]
+            ],
+            # 'worker_type': 'rq'
         }
     ):
         settings = Settings()
@@ -55,7 +57,7 @@ def test_admin_action_no_handler(client, caplog, create_and_sign_in_user):
 
 
 @pytest.mark.django_db
-def test_admin_action_handler_found(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
+def test_admin_action_handler_found_celery(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
         content = FailedMessage.objects.create(
             topic_name='test',
@@ -74,6 +76,34 @@ def test_admin_action_handler_found(client, caplog, create_and_sign_in_user, moc
     assert FailedMessage.objects.get(id=2)  # Prev message should fail
     with pytest.raises(FailedMessage.DoesNotExist):
         FailedMessage.objects.get(id=1)  # message we created above should be deleted
+
+
+@pytest.mark.django_db
+def test_admin_action_handler_found_rq(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
+    # lol = settings.METROID
+    # lol['worker_type'] = 'rq'
+    RQ_QUEUES = {
+
+    }
+    with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
+        content = FailedMessage.objects.create(
+            topic_name='test',
+            subscription_name='sub-test-djangomoduletest',
+            subject='MockedTask',
+            message='my message',
+            exception_str='exc',
+            traceback='long trace',
+            correlation_id='',
+        )
+        change_url = reverse('admin:metroid_failedmessage_changelist')
+        data = {'action': 'retry', '_selected_action': [content.id]}
+        response = client.post(change_url, data, follow=True)
+        assert response.status_code == 200
+        assert len([x.message for x in caplog.records if x.message == 'Attempting to retry id 1']) == 1
+    assert FailedMessage.objects.get(id=2)  # Prev message should fail
+    with pytest.raises(FailedMessage.DoesNotExist):
+        FailedMessage.objects.get(id=1)  # message we created above should be deleted
+
 
 
 @pytest.mark.django_db
