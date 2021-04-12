@@ -133,7 +133,23 @@ class Settings:
         """
         Validates all settings
         """
-        if self.worker_type not in ['celery', 'rq']:
+        if self.worker_type == 'celery':
+            try:
+                import celery  # noqa: F401
+            except ModuleNotFoundError:
+                raise ImproperlyConfigured(
+                    'The package `celery` is required when using `celery` as worker type.'
+                    'Please run `pip install celery` if you with to use celery as the workers.'
+                )
+        elif self.worker_type == 'rq':
+            try:
+                import rq  # noqa: F401
+            except ModuleNotFoundError:
+                raise ImproperlyConfigured(
+                    'The package `django-rq` is required when using `rq` as worker type.'
+                    'Please run `pip install django-rq` if you with to use rq as the workers.'
+                )
+        else:
             raise ImproperlyConfigured("Worker type must be 'celery' or 'rq'")
         if not isinstance(self.subscriptions, list):
             raise ImproperlyConfigured('Subscriptions must be a list')

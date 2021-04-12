@@ -1,11 +1,11 @@
 import json
 import logging
 
-import django_rq
+from django.utils.module_loading import import_string
+
 from asgiref.sync import sync_to_async
 from azure.servicebus import ServiceBusReceivedMessage, TransportType
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
-from django.utils.module_loading import import_string
 
 from metroid.config import settings
 from metroid.typing import Handler
@@ -81,6 +81,8 @@ async def subscribe_to_topic(
                             logger.info('Celery task started')
 
                         elif settings.worker_type == 'rq':
+                            import django_rq
+
                             queue = django_rq.get_queue('metroid')
                             await sync_to_async(queue.enqueue)(
                                 handler_function,

@@ -1,6 +1,7 @@
 import logging
 
 from django_guid import get_guid
+
 from rq.job import Job
 
 logger = logging.getLogger('metroid')
@@ -14,9 +15,7 @@ def on_failure(job: Job, *exc_info) -> bool:
     :param job: RQ Job that has failed
     :param exc_info: Exception Info, tuple of exception type, value and traceback
     """
-    print('ASJDNSALKDJLAKSJD' *12)
     if job.origin == 'metroid':
-        # pass
         topic_name = job.kwargs.get('topic_name')
         subscription_name = job.kwargs.get('subscription_name')
         subject = job.kwargs.get('subject')

@@ -1,6 +1,5 @@
 import logging
 
-import django_rq
 from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -49,6 +48,8 @@ class FailedMessageAdmin(admin.ModelAdmin):
                             }
                         )
                     elif settings.worker_type == 'rq':
+                        import django_rq
+
                         failed_job_registry = django_rq.get_queue('metroid').failed_job_registry
                         failed_job_registry.requeue(message.message.get('id'))
 
