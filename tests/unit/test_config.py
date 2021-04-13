@@ -136,7 +136,6 @@ def test_worker_type_is_rq_not_installed():
     # Mock away the django-rq dependency
     backup = None
     if 'django_rq' in sys.modules:
-        print('NOW')
         backup = sys.modules['django_rq']
         sys.modules['django_rq'] = None
 

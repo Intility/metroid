@@ -7,7 +7,7 @@ from metroid.subscribe import subscribe_to_topic
 
 
 @pytest.mark.asyncio
-async def test_subscription(caplog, mock_service_bus_client_ok):
+async def test_subscription_celery(caplog, mock_service_bus_client_ok):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):  # Runs celery in same thread without workers and stuff
         await subscribe_to_topic(
             **{
@@ -44,7 +44,7 @@ async def test_subscription(caplog, mock_service_bus_client_ok):
 
 
 @pytest.mark.asyncio
-async def test_faulty_metro_data(caplog, mock_service_bus_client_failure):
+async def test_faulty_metro_data_celery(caplog, mock_service_bus_client_failure):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
         await subscribe_to_topic(
             **{
