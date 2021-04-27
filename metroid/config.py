@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Optional, Union
+from typing import Callable, List, Optional, Union
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
@@ -55,14 +55,14 @@ class Settings:
             raise ImproperlyConfigured('`METROID` settings must be defined in settings.py')
 
     @property
-    def subscriptions(self) -> list[Subscription]:
+    def subscriptions(self) -> List[Subscription]:
         """
         Returns all subscriptions
         """
         return self.settings.get('subscriptions', [])
 
     @property
-    def publish_settings(self) -> list[TopicPublishSettings]:
+    def publish_settings(self) -> List[TopicPublishSettings]:
         """
         Returns all publish to metro settings
         """

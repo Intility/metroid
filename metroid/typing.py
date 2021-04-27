@@ -1,4 +1,4 @@
-from typing import Callable, TypedDict
+from typing import Callable, List, Literal, TypedDict
 
 
 class Handler(TypedDict):
@@ -11,7 +11,7 @@ class Subscription(TypedDict):
     topic_name: str
     subscription_name: str
     connection_string: str
-    handlers: list[Handler]
+    handlers: List[Handler]
 
 
 class TopicPublishSettings(TypedDict):
@@ -20,6 +20,6 @@ class TopicPublishSettings(TypedDict):
 
 
 class MetroidSettings(TypedDict):
-    subscriptions: list[Subscription]
-    publish_settings: list[TopicPublishSettings]
-    worker_type: str
+    subscriptions: List[Subscription]
+    publish_settings: List[TopicPublishSettings]
+    worker_type: Literal['rq', 'celery']
