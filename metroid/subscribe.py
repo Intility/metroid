@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import List
 
 from django.utils.module_loading import import_string
 
@@ -7,6 +8,7 @@ from asgiref.sync import sync_to_async
 from azure.servicebus import ServiceBusReceivedMessage, TransportType
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
 
+from metroid.config import settings
 from metroid.typing import Handler
 from metroid.utils import match_handler_subject
 
@@ -17,7 +19,7 @@ async def subscribe_to_topic(
     connection_string: str,
     topic_name: str,
     subscription_name: str,
-    handlers: list[Handler],
+    handlers: List[Handler],
 ) -> None:
     """
     Subscribe to a topic, with a connection string
@@ -67,15 +69,34 @@ async def subscribe_to_topic(
                     ):
                         logger.info('Subject matching: %s', handler.get('subject'))
                         handler_function = import_string(handler.get('handler_function'))
-                        await sync_to_async(handler_function.apply_async)(  # type: ignore
-                            kwargs={
-                                'message': loaded_message,
-                                'topic_name': topic_name,
-                                'subscription_name': subscription_name,
-                                'subject': subject,
-                            }
-                        )
-                        logger.info('Celery task started')
+
+                        if settings.worker_type == 'celery':
+                            await sync_to_async(handler_function.apply_async)(  # type: ignore
+                                kwargs={
+                                    'message': loaded_message,
+                                    'topic_name': topic_name,
+                                    'subscription_name': subscription_name,
+                                    'subject': subject,
+                                }
+                            )
+                            logger.info('Celery task started')
+
+                        elif settings.worker_type == 'rq':
+                            import django_rq
+
+                            queue = django_rq.get_queue('metroid')
+                            await sync_to_async(queue.enqueue)(
+                                handler_function,
+                                job_id=loaded_message.get('id'),
+                                kwargs={
+                                    'message': loaded_message,
+                                    'topic_name': topic_name,
+                                    'subscription_name': subscription_name,
+                                    'subject': subject,
+                                },
+                            )
+                            logger.info('RQ task started')
+
                         await receiver.complete_message(message=message)
                         handled_message = True
                         logger.info('Message with sequence number %s completed', sequence_number)

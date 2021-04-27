@@ -2,6 +2,7 @@ import asyncio
 import logging
 import time
 from asyncio.tasks import Task
+from typing import List
 
 from django.core.management.base import BaseCommand
 
@@ -28,7 +29,7 @@ class Command(BaseCommand):
             while True:
                 time.sleep(60 * 10)  # Keeps CPU usage to a minimum
 
-        tasks: list[Task] = [
+        tasks: List[Task] = [
             asyncio.create_task(
                 subscribe_to_topic(
                     connection_string=subscription['connection_string'],

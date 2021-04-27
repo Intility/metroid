@@ -29,7 +29,7 @@ def mock_subscriptions_admin(monkeypatch):
                         {'subject': 'ErrorTask', 'handler_function': 'demoproj.tasks.error_task'},
                     ],
                 },
-            ]
+            ],
         }
     ):
         settings = Settings()
@@ -37,7 +37,7 @@ def mock_subscriptions_admin(monkeypatch):
 
 
 @pytest.mark.django_db
-def test_admin_action_no_handler(client, caplog, create_and_sign_in_user):
+def test_admin_action_no_handler_celery(client, caplog, create_and_sign_in_user):
     content = FailedMessage.objects.create(
         topic_name='test_topic',
         subscription_name='test_sub',
@@ -55,7 +55,7 @@ def test_admin_action_no_handler(client, caplog, create_and_sign_in_user):
 
 
 @pytest.mark.django_db
-def test_admin_action_handler_found(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
+def test_admin_action_handler_found_celery(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
         content = FailedMessage.objects.create(
             topic_name='test',
@@ -77,7 +77,7 @@ def test_admin_action_handler_found(client, caplog, create_and_sign_in_user, moc
 
 
 @pytest.mark.django_db
-def test_admin_action_failed_retry(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
+def test_admin_action_failed_retry_celery(client, caplog, create_and_sign_in_user, mock_subscriptions_admin):
     with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
         content = FailedMessage.objects.create(
             topic_name='test',

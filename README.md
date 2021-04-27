@@ -47,11 +47,12 @@ This app is intended to streamline integration with Metro for all Django+Celery 
 * Retry failed tasks through your admin dashboard when using the `MetroidTask` base
 
 ## Overview
-* `python` >= 3.9 - We're using the newest versions of type annotations
+* `python` >= 3.8
 * `django` >= 3.1.1 - For `asgiref`, settings
-* `celery` >= 5.0.0 - Execute tasks based on a subject
 * `django-guid` >= 3.2.0 - Storing correlation IDs for failed tasks in the database, making debugging easy
-
+* Choose one:
+   * `celery` >= 5.0.0 - Execute tasks based on a subject
+   * `rq` >= 2.4.1 - Execute tasks based on a subject
 
 ### Implementation
 
@@ -91,7 +92,8 @@ METROID = {
                 }
             ],
         },
-    ]
+    ],
+   'worker_type': 'celery', # default
 }
 ```
 
@@ -129,6 +131,13 @@ Your functions will be called with keyword arguments for
 `message`, `topic_name`, `subscription_name` and `subject`. You function should in other words
 look something like this:
 
+##### Celery
+```python
+@app.task(base=MetroidTask)
+def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
+```
+
+##### rq
 ```python
 def my_func(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
 ```

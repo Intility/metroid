@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Optional, Union
+from typing import Callable, List, Optional, Union
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
@@ -43,7 +43,8 @@ class Settings:
                 'topic_name': 'another_topic',
                 'x_metro_key': 'my-other-metro-key',
             },
-        ]
+        ],
+        'worker_type': 'celery' # default
     }
     """
 
@@ -54,18 +55,25 @@ class Settings:
             raise ImproperlyConfigured('`METROID` settings must be defined in settings.py')
 
     @property
-    def subscriptions(self) -> list[Subscription]:
+    def subscriptions(self) -> List[Subscription]:
         """
         Returns all subscriptions
         """
         return self.settings.get('subscriptions', [])
 
     @property
-    def publish_settings(self) -> list[TopicPublishSettings]:
+    def publish_settings(self) -> List[TopicPublishSettings]:
         """
         Returns all publish to metro settings
         """
         return self.settings.get('publish_settings', [])
+
+    @property
+    def worker_type(self) -> str:
+        """
+        Returns the worker type.
+        """
+        return self.settings.get('worker_type', 'celery')
 
     def get_x_metro_key(self, *, topic_name: str) -> Union[str, None]:
         """
@@ -125,6 +133,24 @@ class Settings:
         """
         Validates all settings
         """
+        if self.worker_type == 'celery':
+            try:
+                import celery  # noqa: F401
+            except ModuleNotFoundError:
+                raise ImproperlyConfigured(
+                    'The package `celery` is required when using `celery` as worker type. '
+                    'Please run `pip install celery` if you with to use celery as the workers.'
+                )
+        elif self.worker_type == 'rq':
+            try:
+                import django_rq  # noqa: F401
+            except ModuleNotFoundError:
+                raise ImproperlyConfigured(
+                    'The package `django-rq` is required when using `rq` as worker type. '
+                    'Please run `pip install django-rq` if you with to use rq as the workers.'
+                )
+        else:
+            raise ImproperlyConfigured("Worker type must be 'celery' or 'rq'")
         if not isinstance(self.subscriptions, list):
             raise ImproperlyConfigured('Subscriptions must be a list')
         if not isinstance(self.publish_settings, list):

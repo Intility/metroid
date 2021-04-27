@@ -1,15 +1,19 @@
 [tool.poetry]
 name = "metroid"
-version = "1.0.1"  # Remember to change in __init__.py as well
+version = "1.1.0"  # Remember to change in __init__.py as well
 description = "Metroid - Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
-maintainers = ["Ali Arfan <ali.arfan@intility.no>"]
+maintainers = [
+    "Ali Arfan <ali.arfan@intility.no>",
+    "Ingvald Lorentzen <ingvald.lorentzen@intility.no",
+    "Per Anders Stadheim <per.anders.stadheim@intility.no>",
+]
 readme = "README.md"
 homepage = "https://github.com/intility/metroid"
 repository = "https://github.com/intility/metroid"
 documentation = "https://github.com/intility/metroid"
 keywords = [
-    'async', 'django', 'servicebus', 'task', 'celery', 'worker',
+    'async', 'django', 'servicebus', 'task', 'celery', 'worker', 'rq',
 ]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
@@ -28,10 +32,9 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 azure-servicebus = "^7.0.1"
 Django = "^3.1.1"
-celery = "^5.0.0"
 django-guid = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
@@ -46,6 +49,9 @@ pytest-asyncio = "^0.14.0"
 pytest-mock = "^3.5.1"
 requests-mock = "^1.8.0"
 pytest-freezegun = "^0.4.2"
+celery = "5.0.0"
+django-rq = "^2.4.1"
+redislite = "^6.0.674960"
 
 [tool.black]
 line-length = 120

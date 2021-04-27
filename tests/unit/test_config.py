@@ -1,10 +1,12 @@
+import sys
+
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.test import override_settings
 
 import pytest
 
-from metroid.config import Settings, settings
+from metroid.config import Settings
 
 
 def test_metro_is_not_in_settings_exception():
@@ -84,6 +86,72 @@ def test_subscriptions_is_not_list_exception():
             invalid_settings.validate()
 
         assert str(e.value) == 'Subscriptions must be a list'
+
+
+def test_worker_type_is_not_valid():
+    """
+    Provides worker type an invalid string, and checks if the correct exception is thrown.
+    """
+    with override_settings(METROID={'worker_type': 'coolio'}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate()
+
+        assert str(e.value) == "Worker type must be 'celery' or 'rq'"
+
+
+def test_worker_type_is_celery_not_installed():
+    """
+    Provides worker type an invalid string, and checks if the correct exception is thrown.
+    """
+    import celery  # noqa: F401
+
+    # Mock away the celery dependency
+    backup = None
+    if 'celery' in sys.modules:
+        backup = sys.modules['celery']
+        sys.modules['celery'] = None
+
+    with override_settings(METROID={'worker_type': 'celery'}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate()
+
+        assert (
+            str(e.value) == 'The package `celery` is required when using `celery` as worker type. '
+            'Please run `pip install celery` if you with to use celery as the workers.'
+        )
+
+    # Put it back in - otherwise a bunch of downstream tests break
+    if backup:
+        sys.modules['celery'] = backup
+
+
+def test_worker_type_is_rq_not_installed():
+    """
+    Provides worker type an invalid string, and checks if the correct exception is thrown.
+    """
+    import django_rq  # noqa: F401
+
+    # Mock away the django-rq dependency
+    backup = None
+    if 'django_rq' in sys.modules:
+        backup = sys.modules['django_rq']
+        sys.modules['django_rq'] = None
+
+    with override_settings(METROID={'worker_type': 'rq'}):
+        with pytest.raises(ImproperlyConfigured) as e:
+            invalid_settings = Settings()
+            invalid_settings.validate()
+
+        assert (
+            str(e.value) == 'The package `django-rq` is required when using `rq` as worker type. '
+            'Please run `pip install django-rq` if you with to use rq as the workers.'
+        )
+
+    # Put it back in - otherwise a bunch of downstream tests break
+    if backup:
+        sys.modules['django_rq'] = backup
 
 
 def test_topic_name_is_not_str_exception():
@@ -380,8 +448,9 @@ def test_no_exception_is_thrown():
                             },
                         ],
                     }
-                ]
-            }
+                ],
+                'worker_type': 'rq',
+            },
         ):
             mock_settings = Settings()
             mock_settings.validate()
