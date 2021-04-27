@@ -4,19 +4,8 @@ from django.test import override_settings
 
 import pytest
 from azure.servicebus import TransportType
-from tests.functional.test_celery.mock_service_bus import service_mock, service_mock_error
 
 from metroid.subscribe import subscribe_to_topic
-
-
-@pytest.fixture
-def mock_service_bus_client_ok(mocker):
-    return mocker.patch('metroid.subscribe.ServiceBusClient', service_mock)
-
-
-@pytest.fixture
-def mock_service_bus_client_failure(mocker):
-    return mocker.patch('metroid.subscribe.ServiceBusClient', service_mock_error)
 
 
 @pytest.mark.asyncio

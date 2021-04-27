@@ -1,8 +1,19 @@
 from django.test import override_settings
 
 import pytest
+from tests.functional.mock_service_bus import instance_service_mock_error, instance_service_mock_ok
 
 from metroid.config import Settings
+
+
+@pytest.fixture
+def mock_service_bus_client_ok(mocker):
+    return mocker.patch('metroid.subscribe.ServiceBusClient', instance_service_mock_ok())
+
+
+@pytest.fixture
+def mock_service_bus_client_failure(mocker):
+    return mocker.patch('metroid.subscribe.ServiceBusClient', instance_service_mock_error())
 
 
 @pytest.fixture(autouse=True)

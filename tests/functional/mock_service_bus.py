@@ -97,20 +97,26 @@ class ServiceBusMock:
 # Create MagicMock with specs of our instances
 # If this is confusing, it's because it is - and it's not really documented.
 # https://bugs.python.org/issue40406
-service_mock = MagicMock()
-service_mock.configure_mock(
-    **{
-        'from_connection_string.return_value.__aenter__.return_value': MagicMock(
-            ServiceBusMock(), **{'get_subscription_receiver.return_value.__aenter__.return_value': ReceiverMock()}
-        )
-    }
-)
-service_mock_error = MagicMock()
-service_mock_error.configure_mock(
-    **{
-        'from_connection_string.return_value.__aenter__.return_value': MagicMock(
-            ServiceBusMock(),
-            **{'get_subscription_receiver.return_value.__aenter__.return_value': ReceiverMock(error=True)},
-        )
-    }
-)
+def instance_service_mock_ok() -> ServiceBusMock:
+    service_mock = MagicMock()
+    service_mock.configure_mock(
+        **{
+            'from_connection_string.return_value.__aenter__.return_value': MagicMock(
+                ServiceBusMock(), **{'get_subscription_receiver.return_value.__aenter__.return_value': ReceiverMock()}
+            )
+        }
+    )
+    return service_mock
+
+
+def instance_service_mock_error() -> ServiceBusMock:
+    service_mock_error = MagicMock()
+    service_mock_error.configure_mock(
+        **{
+            'from_connection_string.return_value.__aenter__.return_value': MagicMock(
+                ServiceBusMock(),
+                **{'get_subscription_receiver.return_value.__aenter__.return_value': ReceiverMock(error=True)},
+            )
+        }
+    )
+    return service_mock_error
