@@ -1,4 +1,8 @@
-<p align="center"><h1 align='center'>Metroid</h1></p>
+<h1 align="center">
+  <img src=".github/images/intility.png" width="124px"/><br/>
+  Metroid
+</h1>
+
 <p align="center">
     <em>Subscribe, act, publish.</em>
 </p>
