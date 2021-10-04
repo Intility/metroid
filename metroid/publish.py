@@ -51,11 +51,14 @@ def publish_event(
         'subject': subject,
     }
     logger.info('Posting event to Metro topic %s. Data: %s', topic_name, formatted_data)
-    metro_response = requests.post(
-        url=f'https://api.intility.no/metro/{topic_name}',
-        headers={'content-type': 'application/json', 'x-metro-key': settings.get_x_metro_key(topic_name=topic_name)},
-        data=json.dumps(formatted_data),
-    )
-    logger.info('Posted to metro')
-    metro_response.raise_for_status()
+    try:
+        metro_response = requests.post(
+            url=f'https://api.intility.no/metro/{topic_name}',
+            headers={'content-type': 'application/json', 'x-metro-key': settings.get_x_metro_key(topic_name=topic_name)},
+            data=json.dumps(formatted_data),
+        )
+        logger.info('Posted to metro')
+        metro_response.raise_for_status()
+    except Exception as error:
+        logger.info('Failed to post to metro. %s', error)
     return
