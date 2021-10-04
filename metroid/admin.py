@@ -5,7 +5,8 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 
 from metroid.config import settings
-from metroid.models import FailedMessage
+from metroid.models import FailedMessage, FailedPublishMessage
+from metroid.republish import retry_failed_published_events
 
 logger = logging.getLogger('metroid')
 
@@ -76,3 +77,15 @@ class FailedMessageAdmin(admin.ModelAdmin):
                     level=messages.WARNING,
                 )
         return
+
+
+@admin.register(FailedPublishMessage)
+class FailedPublishMessageAdmin(admin.ModelAdmin):
+
+    actions = ['retry_publish']
+
+    def retry_publish(self) -> None:
+        """
+        Retry all messages that failed to publish.
+        """
+        retry_failed_published_events()

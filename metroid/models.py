@@ -30,5 +30,8 @@ class FailedPublishMessage(Model):
     data = JSONField()
     correlation_id = CharField(max_length=36, blank=True)
 
-    def str(self) -> str:
+    def __str__(self) -> str:
+        """
+        String representation
+        """
         return f'{self.topic_name}-{self.subject}. Correlation ID: {self.correlation_id}'  # pragma: no cover
