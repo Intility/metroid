@@ -60,3 +60,4 @@ def mock_subscriptions(monkeypatch):
         monkeypatch.setattr('metroid.management.commands.metroid.settings', settings)
         monkeypatch.setattr('metroid.publish.settings', settings)
         monkeypatch.setattr('metroid.republish.settings', settings)
+        monkeypatch.setattr('metroid.admin.settings', settings)

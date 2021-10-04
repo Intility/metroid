@@ -115,7 +115,7 @@ class FailedPublishMessageAdmin(admin.ModelAdmin):
                 logger.info('Posted to Metro')
                 self.message_user(
                     request=request,
-                    message='Message has been republish',
+                    message='Message has been republished',
                     level=messages.SUCCESS,
                 )
             except Exception as error:
