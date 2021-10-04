@@ -53,6 +53,7 @@ def publish_event(
     logger.info('Posting event to Metro topic %s. Data: %s', topic_name, formatted_data)
 
     try:
+
         metro_response = requests.post(
             url=f'https://api.intility.no/metro/{topic_name}',
             headers={
@@ -63,19 +64,25 @@ def publish_event(
         )
         metro_response.raise_for_status()
         logger.info('Posted to metro')
-
     except Exception as error:
         from metroid.models import FailedPublishMessage
 
-        FailedPublishMessage.objects.create(
-            event_type=event_type,
-            event_time=event_time or timezone.now().isoformat(),
-            data_version=data_version,
-            data=data,
-            subject=subject,
-            topic_name=topic_name,
-        )
         logger.info('Failed to post to metro. %s', error)
-        raise error
+
+        try:
+            FailedPublishMessage.objects.create(
+                event_type=event_type,
+                event_time=event_time or timezone.now().isoformat(),
+                data_version=data_version,
+                data=data,
+                subject=subject,
+                topic_name=topic_name,
+            )
+        # failsafe just in case
+        except Exception as error:  # pragma: no cover
+            logger.exception('Unable to save Metro message. Error: %s', error)
+            return
+
+    logger.info('Saved failed message to database.')
 
     return

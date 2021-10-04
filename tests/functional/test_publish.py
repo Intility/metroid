@@ -3,7 +3,7 @@ import json
 from django.utils import timezone
 
 import pytest
-import requests
+from urllib3.exceptions import HTTPError
 
 from metroid.models import FailedPublishMessage
 from metroid.publish import publish_event
@@ -19,16 +19,26 @@ def mock_response_ok(mocker):
 
 @pytest.fixture
 def mock_response_error(mocker):
-    mock_response = mocker.Mock()
-    mock_response.json.return_value = {'Error': 'Something went wrong'}
-    mock_response.status_code = 500
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError
-
     return_mock = mocker.Mock()
+    return_mock.post.side_effect = HTTPError(mocker.Mock(status_code=500))
 
     mocker.patch('metroid.publish.requests', return_mock)
-    return_mock.return_value = mock_response
+    return return_mock
 
+
+@pytest.fixture
+def mock_republish_error(mocker):
+    return_mock = mocker.Mock()
+    return_mock.post.side_effect = HTTPError(mocker.Mock(status_code=500))
+
+    mocker.patch('metroid.republish.requests', return_mock)
+    return return_mock
+
+
+@pytest.fixture
+def mock_republish_ok(mocker):
+    return_mock = mocker.Mock()
+    mocker.patch('metroid.republish.requests', return_mock)
     return return_mock
 
 
@@ -98,7 +108,7 @@ def test_failed_message_saved(mock_response_error):
 
 
 @pytest.mark.django_db
-def test_retry_failed_messages(mock_response_ok):
+def test_retry_failed_messages(mock_republish_ok):
     now = timezone.now().isoformat()
     FailedPublishMessage.objects.create(
         event_type='Intility.MyTopic',
@@ -112,7 +122,7 @@ def test_retry_failed_messages(mock_response_ok):
     assert len(FailedPublishMessage.objects.all()) == 1
     retry_failed_published_events()
 
-    mock_response_ok.post.assert_called_with(
+    mock_republish_ok.post.assert_called_with(
         url='https://api.intility.no/metro/test123',
         headers={'content-type': 'application/json', 'x-metro-key': 'my-metro-key'},
         data=json.dumps(
@@ -129,7 +139,7 @@ def test_retry_failed_messages(mock_response_ok):
 
 
 @pytest.mark.django_db
-def test_retry_failed_messages_fail(mock_response_error):
+def test_retry_failed_messages_fail(mock_republish_error):
     now = timezone.now().isoformat()
     FailedPublishMessage.objects.create(
         event_type='Intility.MyTopic',
@@ -142,6 +152,4 @@ def test_retry_failed_messages_fail(mock_response_error):
 
     assert len(FailedPublishMessage.objects.all()) == 1
     retry_failed_published_events()
-
-    assert mock_response_error.raise_for_status
     assert len(FailedPublishMessage.objects.all()) == 1

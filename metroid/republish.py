@@ -24,7 +24,7 @@ def retry_failed_published_events() -> None:
     for message in FailedPublishMessage.objects.all():
         formatted_data = {
             'eventType': message.event_type,
-            'eventTime': message.event_time or timezone.now().isoformat(),
+            'eventTime': message.event_time.isoformat() or timezone.now().isoformat(),
             'dataVersion': message.data_version,
             'data': message.data,
             'subject': message.subject,
