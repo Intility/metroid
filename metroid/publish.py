@@ -7,6 +7,7 @@ from django.utils import timezone
 import requests
 
 from metroid.config import settings
+from metroid.models import FailedPublishMessage
 
 logger = logging.getLogger('metroid')
 
@@ -37,12 +38,13 @@ def publish_event(
         'test/subject'
     :param data_version: str
         '1.0'
-    :param event_time: Optional[str] - A valid ISO-8601 timestamp (YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ss±hh:mm..)
+    :param event_time: Optional[str] - A valid ISO-8601 timestamp (YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ssÂ±hh:mm..)
         '2021-02-22T12:34:18.216747+00:00'
 
     :return: None - Metro gives empty response on valid posts
     :raises: requests.exceptions.HTTPError
     """
+
     formatted_data = {
         'eventType': event_type,
         'eventTime': event_time or timezone.now().isoformat(),
@@ -51,14 +53,24 @@ def publish_event(
         'subject': subject,
     }
     logger.info('Posting event to Metro topic %s. Data: %s', topic_name, formatted_data)
+
     try:
         metro_response = requests.post(
             url=f'https://api.intility.no/metro/{topic_name}',
             headers={'content-type': 'application/json', 'x-metro-key': settings.get_x_metro_key(topic_name=topic_name)},
             data=json.dumps(formatted_data),
         )
-        logger.info('Posted to metro')
         metro_response.raise_for_status()
+        logger.info('Posted to metro')
+
     except Exception as error:
-        logger.info('Failed to post to metro. %s', error)
+        FailedPublishMessage.objects.create(
+            event_type=event_type,
+            event_time=event_time or timezone.now().isoformat(),
+            data_version=data_version,
+            data=data,
+            subject=subject
+        )
+        raise error
+
     return
