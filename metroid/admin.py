@@ -6,7 +6,6 @@ from django.http import HttpRequest
 
 from metroid.config import settings
 from metroid.models import FailedMessage, FailedPublishMessage
-from metroid.republish import retry_failed_published_events
 
 logger = logging.getLogger('metroid')
 
@@ -81,11 +80,49 @@ class FailedMessageAdmin(admin.ModelAdmin):
 
 @admin.register(FailedPublishMessage)
 class FailedPublishMessageAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        'correlation_id',
+        'data',
+        'data_version',
+        'event_time',
+        'event_type',
+        'topic_name',
+        'subject',
+    )
+    list_display = ['id', 'correlation_id', 'topic_name', 'subject', 'event_time']
 
     actions = ['retry_publish']
 
-    def retry_publish(self) -> None:
+    def retry_publish(self, request: HttpRequest, queryset: QuerySet) -> None:
         """
-        Retry all messages that failed to publish.
+        Retry messages that failed to publish.
         """
-        retry_failed_published_events()
+        for message in queryset:
+            try:
+                import requests
+
+                metro_response = requests.post(
+                    url=f'https://api.intility.no/metro/{message.topic_name}',
+                    headers={
+                        'content-type': 'application/json',
+                        'x-metro-key': settings.get_x_metro_key(topic_name=message.topic_name),
+                    },
+                    data=message.data,
+                )
+                metro_response.raise_for_status()
+                logger.info('Deleting %s from database', message.id)
+                message.delete()
+                logger.info('Posted to Metro')
+                self.message_user(
+                    request=request,
+                    message='Message has been republish',
+                    level=messages.SUCCESS,
+                )
+            except Exception as error:
+                logger.exception('Unable to republish Metro message. Error: %s', error)
+                self.message_user(
+                    request=request,
+                    message=f'Unable to republish Metro message. Error: {error}',
+                    level=messages.ERROR,
+                )
+        return
