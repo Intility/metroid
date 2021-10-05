@@ -27,7 +27,7 @@ def mock_republish_ok(mocker):
 
 
 @pytest.mark.django_db
-def test_failed_message_saved(mock_response_error):
+def test_failed_message_saved(mock_republish_error):
     now = timezone.now().isoformat()
     publish_event(
         topic_name='test123',

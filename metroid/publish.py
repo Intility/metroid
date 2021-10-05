@@ -37,7 +37,7 @@ def publish_event(
         'test/subject'
     :param data_version: str
         '1.0'
-    :param event_time: Optional[str] - A valid ISO-8601 timestamp (YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ssÂ±hh:mm..)
+    :param event_time: Optional[str] - A valid ISO-8601 timestamp (YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ss±hh:mm..)
         '2021-02-22T12:34:18.216747+00:00'
 
     :return: None - Metro gives empty response on valid posts
@@ -53,7 +53,6 @@ def publish_event(
     logger.info('Posting event to Metro topic %s. Data: %s', topic_name, formatted_data)
 
     try:
-
         metro_response = requests.post(
             url=f'https://api.intility.no/metro/{topic_name}',
             headers={

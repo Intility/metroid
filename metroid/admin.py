@@ -4,6 +4,8 @@ from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
 
+import requests
+
 from metroid.config import settings
 from metroid.models import FailedMessage, FailedPublishMessage
 
@@ -99,8 +101,6 @@ class FailedPublishMessageAdmin(admin.ModelAdmin):
         """
         for message in queryset:
             try:
-                import requests
-
                 metro_response = requests.post(
                     url=f'https://api.intility.no/metro/{message.topic_name}',
                     headers={
