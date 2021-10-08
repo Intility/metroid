@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 import pytest
+import requests
+from urllib3.exceptions import HTTPError
 
 from metroid.config import Settings
-from metroid.models import FailedMessage
+from metroid.models import FailedMessage, FailedPublishMessage
 
 
 @pytest.fixture
@@ -34,6 +37,15 @@ def mock_subscriptions_admin(monkeypatch):
     ):
         settings = Settings()
         monkeypatch.setattr('metroid.admin.settings', settings)
+
+
+@pytest.fixture
+def mock_republish_error(mocker):
+    return_mock = mocker.Mock()
+    return_mock.post.side_effect = HTTPError(mocker.Mock(status_code=500))
+
+    mocker.patch('metroid.admin.requests', return_mock)
+    return return_mock
 
 
 @pytest.mark.django_db
@@ -104,3 +116,49 @@ def test_admin_action_failed_retry_celery(client, caplog, create_and_sign_in_use
             )
             == 1
         )
+
+
+@pytest.mark.django_db
+def test_admin_action_retry_publish(client, caplog, create_and_sign_in_user, requests_mock):
+    now = timezone.now().isoformat()
+    with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
+        content = FailedPublishMessage.objects.create(
+            event_type='Intility.MyTopic',
+            event_time=now,
+            data_version='1.0',
+            data={'hello': 'world'},
+            subject='my/test/subject',
+            topic_name='test123',
+        )
+
+        assert FailedPublishMessage.objects.get(id=1)
+        requests_mock.post('https://api.intility.no/metro/test123', status_code=200)
+        change_url = reverse('admin:metroid_failedpublishmessage_changelist')
+        data = {'action': 'retry_publish', '_selected_action': [content.id]}
+        response = client.post(change_url, data, follow=True)
+
+        assert response.status_code == 200
+        with pytest.raises(FailedPublishMessage.DoesNotExist):
+            FailedPublishMessage.objects.get(id=1)  # message we created above should be deleted
+
+
+@pytest.mark.django_db
+def test_admin_action_retry_publish_error(client, caplog, create_and_sign_in_user, requests_mock):
+    now = timezone.now().isoformat()
+    with override_settings(CELERY_TASK_ALWAYS_EAGER=True):
+        content = FailedPublishMessage.objects.create(
+            event_type='Intility.MyTopic',
+            event_time=now,
+            data_version='1.0',
+            data={'hello': 'world'},
+            subject='my/test/subject',
+            topic_name='test123',
+        )
+
+        assert FailedPublishMessage.objects.get(id=1)
+        requests_mock.post('https://api.intility.no/metro/test123', status_code=500)
+        change_url = reverse('admin:metroid_failedpublishmessage_changelist')
+        data = {'action': 'retry_publish', '_selected_action': [content.id]}
+        response = client.post(change_url, data, follow=True)
+        assert response.status_code == 200
+        assert FailedPublishMessage.objects.get(id=1)  # message we created above should not be deleted

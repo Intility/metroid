@@ -51,11 +51,37 @@ def publish_event(
         'subject': subject,
     }
     logger.info('Posting event to Metro topic %s. Data: %s', topic_name, formatted_data)
-    metro_response = requests.post(
-        url=f'https://api.intility.no/metro/{topic_name}',
-        headers={'content-type': 'application/json', 'x-metro-key': settings.get_x_metro_key(topic_name=topic_name)},
-        data=json.dumps(formatted_data),
-    )
-    logger.info('Posted to metro')
-    metro_response.raise_for_status()
+
+    try:
+        metro_response = requests.post(
+            url=f'https://api.intility.no/metro/{topic_name}',
+            headers={
+                'content-type': 'application/json',
+                'x-metro-key': settings.get_x_metro_key(topic_name=topic_name),
+            },
+            data=json.dumps(formatted_data),
+        )
+        metro_response.raise_for_status()
+        logger.info('Posted to metro')
+    except Exception as error:
+        from metroid.models import FailedPublishMessage
+
+        logger.info('Failed to post to metro. %s', error)
+
+        try:
+            FailedPublishMessage.objects.create(
+                event_type=event_type,
+                event_time=event_time or timezone.now().isoformat(),
+                data_version=data_version,
+                data=data,
+                subject=subject,
+                topic_name=topic_name,
+            )
+        # failsafe just in case
+        except Exception as error:  # pragma: no cover
+            logger.exception('Unable to save Metro message. Error: %s', error)
+            return
+
+    logger.info('Saved failed message to database.')
+
     return

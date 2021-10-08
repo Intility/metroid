@@ -3,6 +3,7 @@ import json
 from django.utils import timezone
 
 import pytest
+from urllib3.exceptions import HTTPError
 
 from metroid.publish import publish_event
 
@@ -10,6 +11,15 @@ from metroid.publish import publish_event
 @pytest.fixture
 def mock_response_ok(mocker):
     return_mock = mocker.Mock()
+    mocker.patch('metroid.publish.requests', return_mock)
+    return return_mock
+
+
+@pytest.fixture
+def mock_response_error(mocker):
+    return_mock = mocker.Mock()
+    return_mock.post.side_effect = HTTPError(mocker.Mock(status_code=500))
+
     mocker.patch('metroid.publish.requests', return_mock)
     return return_mock
 
