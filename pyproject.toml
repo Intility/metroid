@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metroid"
-version = "1.2.0"  # Remember to change in __init__.py as well
+version = "1.2.1"  # Remember to change in __init__.py as well
 description = "Metroid - Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
 maintainers = [
