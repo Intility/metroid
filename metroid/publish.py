@@ -77,11 +77,8 @@ def publish_event(
                 subject=subject,
                 topic_name=topic_name,
             )
+            logger.info('Saved failed message to database.')
         # failsafe just in case
         except Exception as error:  # pragma: no cover
             logger.exception('Unable to save Metro message. Error: %s', error)
-            return
-
-    logger.info('Saved failed message to database.')
-
     return
