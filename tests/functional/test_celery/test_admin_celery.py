@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 import pytest
-import requests
 from urllib3.exceptions import HTTPError
 
 from metroid.config import Settings
