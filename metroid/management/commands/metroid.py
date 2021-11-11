@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 import time
 from asyncio.tasks import Task
 from typing import List
@@ -55,6 +56,8 @@ class Command(BaseCommand):
             # Cancel all remaining running tasks. This kills the service (and container)
             logger.info('Cancelling pending task %s', task)
             task.cancel()
+        logger.info('All tasks cancelled')
+        sys.exit('Exiting process')
 
     def handle(self, *args: None, **options) -> None:
         """

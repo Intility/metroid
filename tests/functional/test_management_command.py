@@ -40,14 +40,18 @@ def subscriptions_exception(mocker):
 
 
 def test_command_early_return(subscriptions_return, caplog):
-    call_command('metroid')
+    with pytest.raises(SystemExit):
+        call_command('metroid')
     assert [x for x in caplog.records if 'ended early without an exception' in x.message]
     assert [x for x in caplog.records if 'Cancelling pending task' in x.message]
     assert not [x for x in caplog.records if 'Exception in subscription' in x.message]
+    assert [x for x in caplog.records if 'All tasks cancelled' in x.message]
 
 
 def test_command_exception(subscriptions_exception, caplog):
-    call_command('metroid')
+    with pytest.raises(SystemExit):
+        call_command('metroid')
     assert [x for x in caplog.records if 'Exception in subscription' in x.message]
     assert [x for x in caplog.records if 'Cancelling pending task' in x.message]
     assert not [x for x in caplog.records if 'ended early without an exception' in x.message]
+    assert [x for x in caplog.records if 'All tasks cancelled' in x.message]
