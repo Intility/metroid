@@ -49,7 +49,7 @@ pytest-asyncio = "^0.14.0"
 pytest-mock = "^3.5.1"
 requests-mock = "^1.8.0"
 pytest-freezegun = "^0.4.2"
-celery = "5.0.0"
+celery = "5.2.2"
 django-rq = "^2.4.1"
 redislite = "^6.0.674960"
 
