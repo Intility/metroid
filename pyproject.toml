@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metroid"
-version = "1.2.3"  # Remember to change in __init__.py as well
+version = "1.2.4"  # Remember to change in __init__.py as well
 description = "Metroid - Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
 maintainers = [
@@ -34,22 +34,22 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 azure-servicebus = "^7.4.0"
-Django = "^3.1.1"
+Django = "^3.1.1 || ^4.0"
 django-guid = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.9.3"
 python-decouple = "^3.4"
-redis = "^3.5.3"
-black = "^20.8b1"
+redis = "^4.0.0"
+black = "^22.1.0"
 pytest = "^6.2.2"
-pytest-cov = "^2.11.1"
+pytest-cov = "^3.0.0"
 pytest-django = "^4.1.0"
-pytest-asyncio = "^0.14.0"
+pytest-asyncio = "^0.17.0"
 pytest-mock = "^3.5.1"
 requests-mock = "^1.8.0"
 pytest-freezegun = "^0.4.2"
-celery = "5.2.2"
+celery = "^5.2.2"
 django-rq = "^2.4.1"
 redislite = "^6.0.674960"
 
