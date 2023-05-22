@@ -15,7 +15,7 @@ def retry_failed_published_events() -> None:
     """
     Trys to publish all previously failed messages again.
 
-    It make a wrapper around this function based on your needs. If you implement posting to Metro at the end
+    It makes a wrapper around this function based on your needs. If you implement posting to Metro at the end
     of your API logic you might want to still return a 200 to the API user, even if a post to Metro should fail.
 
     :return: None - Metro gives empty response on valid posts

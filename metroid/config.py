@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, List, Optional, Union
+from typing import Callable, List, Optional
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
@@ -75,7 +75,7 @@ class Settings:
         """
         return self.settings.get('worker_type', 'celery')
 
-    def get_x_metro_key(self, *, topic_name: str) -> Union[str, None]:
+    def get_x_metro_key(self, *, topic_name: str) -> str:
         """
         Fetches the x-metro-key based on topic
         """

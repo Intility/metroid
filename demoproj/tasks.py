@@ -32,11 +32,11 @@ def example_celery_task(*, message: dict, topic_name: str, subscription_name: st
     """
     Celery Example Task
     """
-    print('Do Something')  # noqa: T001
+    print('Do Something')  # noqa: T201
 
 
 def example_rq_task(*, message: dict, topic_name: str, subscription_name: str, subject: str) -> None:
     """
     RQ Example Task
     """
-    print('Do Something')  # noqa: T001
+    print('Do Something')  # noqa: T201
