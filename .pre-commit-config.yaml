@@ -1,4 +1,9 @@
-exclude: README.md
+exclude: |
+  (?x)^(
+  .*README.md|
+  .*migrations/.*|
+  .*static/.*|
+  )$
 repos:
   - repo: https://github.com/ambv/black
     rev: 23.3.0
