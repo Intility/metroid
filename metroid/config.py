@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, List, Optional
+from collections.abc import Callable
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
@@ -55,14 +55,14 @@ class Settings:
             raise ImproperlyConfigured('`METROID` settings must be defined in settings.py')
 
     @property
-    def subscriptions(self) -> List[Subscription]:
+    def subscriptions(self) -> list[Subscription]:
         """
         Returns all subscriptions
         """
         return self.settings.get('subscriptions', [])
 
     @property
-    def publish_settings(self) -> List[TopicPublishSettings]:
+    def publish_settings(self) -> list[TopicPublishSettings]:
         """
         Returns all publish to metro settings
         """
@@ -85,7 +85,7 @@ class Settings:
         logger.critical('Unable to find a x-metro-key for %s', topic_name)
         raise ImproperlyConfigured(f'No x-metro-key found for {topic_name}')
 
-    def get_handler_function(self, *, topic_name: str, subscription_name: str, subject: str) -> Optional[Callable]:
+    def get_handler_function(self, *, topic_name: str, subscription_name: str, subject: str) -> Callable | None:
         """
         Intended to be used by retry-log.
         It finds the handler function based on information we have stored in the database.

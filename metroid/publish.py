@@ -1,6 +1,5 @@
 import json
 import logging
-from typing import Optional, Union
 
 from django.utils import timezone
 
@@ -15,10 +14,10 @@ def publish_event(
     *,
     topic_name: str,
     event_type: str,
-    data: Union[list, dict],
+    data: list | dict,
     subject: str,
     data_version: str,
-    event_time: Optional[str] = None,
+    event_time: str | None = None,
 ) -> None:
     """
     Sync helper function to publish metro events based on a topic name.

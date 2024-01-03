@@ -8,16 +8,16 @@
 </p>
 <p align="center">
     <a href="https://python.org">
-        <img src="https://img.shields.io/badge/python-v3.9+-blue.svg" alt="Python version">
+        <img src="https://img.shields.io/badge/python-v3.10+-blue.svg" alt="Python version">
     </a>
     <a href="https://djangoproject.com">
-        <img src="https://img.shields.io/badge/django-3.1.1+%20-blue.svg" alt="Django version">
+        <img src="https://img.shields.io/badge/django-4.2+%20-blue.svg" alt="Django version">
     </a>
     <a href="https://docs.celeryproject.org/en/stable/">
-        <img src="https://img.shields.io/badge/celery-5.0.0+%20-blue.svg" alt="Celery version">
+        <img src="https://img.shields.io/badge/celery-5.3.0+%20-blue.svg" alt="Celery version">
     </a>
     <a href="https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/servicebus/azure-servicebus">
-        <img src="https://img.shields.io/badge/azure--servicebus-7.0.1+%20-blue.svg" alt="ServiceBus version">
+        <img src="https://img.shields.io/badge/azure--servicebus-7.10.0+%20-blue.svg" alt="ServiceBus version">
     </a>
     <a href="https://github.com/snok/django-guid/">
         <img src="https://img.shields.io/badge/django--guid-3.2.0+-blue.svg" alt="Django GUID version">
@@ -51,12 +51,12 @@ This app is intended to streamline integration with Metro for all Django+Celery 
 * Retry failed tasks through your admin dashboard when using the `MetroidTask` base
 
 ## Overview
-* `python` >= 3.8
-* `django` >= 3.1.1 - For `asgiref`, settings
+* `python` >= 3.10
+* `django` >= 4.2 - For `asgiref`, settings
 * `django-guid` >= 3.2.0 - Storing correlation IDs for failed tasks in the database, making debugging easy
 * Choose one:
-   * `celery` >= 5.0.0 - Execute tasks based on a subject
-   * `rq` >= 2.4.1 - Execute tasks based on a subject
+   * `celery` >= 5.3.0 - Execute tasks based on a subject
+   * `django-rq` >= 2.4.1 - Execute tasks based on a subject
 
 ### Implementation
 

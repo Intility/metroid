@@ -6,13 +6,13 @@ exclude: |
   )$
 repos:
   - repo: https://github.com/ambv/black
-    rev: 23.3.0
+    rev: 23.12.1
     hooks:
       - id: black
         args:
           - --quiet
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-case-conflict
       - id: end-of-file-fixer
@@ -23,31 +23,31 @@ repos:
       - id: detect-private-key
       - id: double-quote-string-fixer
   - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: 6.1.0
     hooks:
       - id: flake8
         additional_dependencies:
-          - flake8-annotations==3.0.0  # Enforces type annotation
-          - flake8-bugbear==23.1.20  # Looks for likely bugs and design problems
-          - flake8-comprehensions==3.10.1  # Looks for unnecessary generator functions that can be converted to list comprehensions
-          - flake8-deprecated==2.0.1  # Looks for method deprecations
+          - flake8-annotations==3.0.1  # Enforces type annotation
+          - flake8-bugbear==23.9.16  # Looks for likely bugs and design problems
+          - flake8-comprehensions==3.14.0  # Looks for unnecessary generator functions that can be converted to list comprehensions
+          - flake8-deprecated==2.2.1  # Looks for method deprecations
           - flake8-docstrings==1.7.0  # Verifies that all functions/methods have docstrings
           - flake8-print==5.0.0  # Checks for print statements
           - flake8-use-fstring==1.4  # Enforces use of f-strings over .format and %s
         args:
           - --enable-extensions=G
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.4.0
+    rev: v3.15.0
     hooks:
       - id: pyupgrade
         args:
-          - --py38-plus
+          - --py310-plus
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 5.13.2
     hooks:
       - id: isort
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.3.0
+    rev: v1.8.0
     hooks:
       - id: mypy
         additional_dependencies:
