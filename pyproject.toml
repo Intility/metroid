@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metroid"
-version = "1.3.0"  # Remember to change in __init__.py as well
+version = "1.4.0"  # Remember to change in __init__.py as well
 description = "Metroid - Metro for Django"
 authors = ["Jonas Krüger Svensson <jonas.svensson@intility.no>"]
 maintainers = [
@@ -19,12 +19,15 @@ classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Environment :: Web Environment',
     'Framework :: Django',
-    'Framework :: Django :: 3.1',
+    'Framework :: Django :: 4.2',
+    'Framework :: Django :: 5.0',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',
     'Programming Language :: Python',
-    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
     'Topic :: Software Development',
     'Topic :: Software Development :: Libraries',
     'Topic :: Software Development :: Libraries :: Application Frameworks',
@@ -32,16 +35,16 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 aiohttp = "^3.8.4"
 azure-servicebus = "^7.10.0"
-Django = "^3.2 || ^4.0"
+Django = "^4.0 || ^5.0"
 django-guid = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.3.2"
 python-decouple = "^3.4"
-redis = "^4.0.0"
+redis = "^4.0.0 || ^5.0.0"
 black = "^23.3.0"
 pytest = "^7.3.1"
 pytest-cov = "^4.0.0"
@@ -50,14 +53,14 @@ pytest-asyncio = "^0.21.0"
 pytest-mock = "^3.5.1"
 requests-mock = "^1.8.0"
 pytest-freezegun = "^0.4.2"
-celery = "^5.3.0rc1"
+celery = "^5.3.0"
 django-rq = "^2.4.1"
 redislite = "^6.0.674960"
 
 [tool.black]
 line-length = 120
 skip-string-normalization = true
-target-version = ['py38']
+target-version = ['py310']
 include = '\.pyi?$'
 exclude = '''
 (

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from billiard.einfo import ExceptionInfo
 from django_guid import get_guid
@@ -11,7 +11,7 @@ logger = logging.getLogger('metroid')
 
 class MetroidTask(Task):
     def on_failure(
-        self, exc: Exception, task_id: str, args: tuple, kwargs: Dict[str, Any], einfo: ExceptionInfo
+        self, exc: Exception, task_id: str, args: tuple, kwargs: dict[str, Any], einfo: ExceptionInfo
     ) -> None:
         """
         Custom error handler for Metro Celery tasks.

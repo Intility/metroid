@@ -1,6 +1,5 @@
 import json
 import logging
-from typing import List
 
 from django.utils.module_loading import import_string
 
@@ -19,7 +18,7 @@ async def subscribe_to_topic(
     connection_string: str,
     topic_name: str,
     subscription_name: str,
-    handlers: List[Handler],
+    handlers: list[Handler],
 ) -> None:
     """
     Subscribe to a topic, with a connection string
